@@ -15,6 +15,7 @@ const fs = require("fs");
 const { exec } = require("child_process");
 let useYarn = false;
 const args = process.argv.slice(2);
+const color = chalk.magenta;
 
 // Harmony libraries
 const scope = "@faharmony";
@@ -97,16 +98,15 @@ const execute = (command, message = "", showError = true) =>
         resolve(error.message);
         return;
       }
-      if (message !== "") console.log(chalk.magenta.bold(message + "\n"));
+      if (message !== "") console.log(color.bold(message + "\n"));
       resolve(stdout ? stdout : stderr);
     });
   });
 
 /** Custom async forEach method
- * @param {any[]} array @param {Function} callback */
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++)
-    await callback(array[index], index, array);
+ * @param {any[]} a @param {Function} c */
+async function asyncForEach(a, c) {
+  for (let i = 0; i < a.length; i++) await c(a[i], i, a);
 }
 
 /** Function to install packages depending on tag
@@ -129,10 +129,10 @@ const installPackages = async (tag = "latest", packages = []) => {
     /** @param {Package} pkg */
     async (pkg) => {
       console.log(
-        chalk.magenta(
+        color(
           `Installing library ${getLibraryName(pkg.name)}@${tag} using ${
             useYarn ? "Yarn" : "NPM"
-          }:`
+          }`
         )
       );
       const externalTypesMain = pkg.types || [];
@@ -157,7 +157,7 @@ const installPackages = async (tag = "latest", packages = []) => {
       const libraryName = getLibraryName(pkg.name);
       const externalTypes = pkg.types || [];
       console.log(
-        chalk.magenta(
+        color(
           `Installing library ${libraryName}@${tag} using ${
             useYarn ? "Yarn" : "NPM"
           }`
@@ -181,46 +181,64 @@ const installPackages = async (tag = "latest", packages = []) => {
   );
 };
 
+/** Install a main package according to command param
+ * @param {string} pkg */
+const installMainPackage = async (pkg) => {
+  const corePkg = checkPackageInfo(core);
+  if (corePkg) await installPackages(corePkg.tag, [pkg]);
+  else
+    console.log(
+      chalk.red(
+        `A version of @faharmony/core must be installed before installing other packages. \nTry running command again without any package parameters.`
+      )
+    );
+  return 0;
+};
+
 const checkParameter = async () => {
-  switch (args[0].trim()) {
-    // Tags
-    case "RC":
+  switch (args[0].trim().toLowerCase()) {
+    // Tag params
     case "rc":
       await installPackages("RC", []);
       break;
-    case "SNAPSHOT":
     case "snapshot":
       await installPackages("SNAPSHOT", []);
       break;
-    case "LATEST":
     case "latest":
-    case "STABLE":
     case "stable":
       await installPackages("latest", []);
       break;
 
-    // Other libraries
+    // Package params
     case "table":
     case "form":
     case "charts":
+      await installMainPackage(args[0]);
+      break;
+
+    // Info params
+    case "version":
       const corePkg = checkPackageInfo(core);
-      if (corePkg) await installPackages(corePkg.tag, [args[0]]);
-      else
+      if (corePkg)
         console.log(
-          chalk.red(
-            `A version of @faharmony/core must be installed before installing other packages. \nTry running command again without any package parameters.`
+          color(
+            `Current version of Harmony is ${corePkg.version} (tag:${corePkg.tag}).`
           )
         );
-      break;
+
     // No match
     default:
-      console.log(chalk.red.bold("The command is incorrect."));
+      console.log(
+        chalk.red.bold(
+          "The command is incorrect. Check the param or run command without any param."
+        )
+      );
   }
 };
 
 // START
 (async () => {
-  console.log(chalk.magenta.bold("\n=== Welcome to Harmony installer === \n"));
+  console.log(color.bold("\n=== Welcome to Harmony installer === \n"));
 
   // CHECK YARN
   const yarnVersion = await execute(`yarn --version`, "", false);
@@ -240,6 +258,6 @@ const checkParameter = async () => {
     }
   }
 
-  console.log(chalk.magenta("Wrapping up Harmony installer...\n"));
+  console.log(color("Wrapping up Harmony installer...\n"));
 })();
 // END
