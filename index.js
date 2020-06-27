@@ -11,6 +11,7 @@
 
 /** @type {any} */
 const chalk = require("chalk");
+const cfonts = require("cfonts");
 const fs = require("fs");
 const { exec } = require("child_process");
 let useYarn = false;
@@ -195,6 +196,22 @@ const installMainPackage = async (pkg) => {
   return 0;
 };
 
+const harmonyVersion = async () => {
+  const corePkg = checkPackageInfo(core);
+  if (corePkg)
+    console.log(
+      color(
+        `Current version of harmony is ${color.bold(corePkg.version)} (tag:${
+          corePkg.tag
+        }).`
+      )
+    );
+  else
+    console.log(
+      chalk.red(`No installed version of harmony found in this project.`)
+    );
+};
+
 const checkParameter = async () => {
   switch (args[0].trim().toLowerCase()) {
     // Tag params
@@ -218,13 +235,8 @@ const checkParameter = async () => {
 
     // Info params
     case "version":
-      const corePkg = checkPackageInfo(core);
-      if (corePkg)
-        console.log(
-          color(
-            `Current version of Harmony is ${corePkg.version} (tag:${corePkg.tag}).`
-          )
-        );
+      await harmonyVersion();
+      break;
 
     // No match
     default:
@@ -238,7 +250,15 @@ const checkParameter = async () => {
 
 // START
 (async () => {
-  console.log(color.bold("\n=== Welcome to Harmony installer === \n"));
+  console.log("\n");
+  cfonts.say("harmony", {
+    font: "tiny",
+    colors: ["magenta"],
+    space: false,
+  });
+  console.log(
+    color.bold(` ${Array(31).join("—")}\n welcome to ☯️ harmony installer\n`)
+  );
 
   // CHECK YARN
   const yarnVersion = await execute(`yarn --version`, "", false);
@@ -258,6 +278,6 @@ const checkParameter = async () => {
     }
   }
 
-  console.log(color("Wrapping up Harmony installer...\n"));
+  console.log(color("\nWrapping up Harmony installer...\n"));
 })();
 // END
