@@ -45,7 +45,10 @@ const mainPackages = [
 ];
 
 // Paths
-const paths = { nodeModules: "../node_modules/", yarnLock: "../yarn.lock" };
+const paths = {
+  nodeModules: process.cwd() + "/node_modules/",
+  yarnLock: process.cwd() + "/yarn.lock",
+};
 
 // Commands
 const commands = {
