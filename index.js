@@ -10,12 +10,7 @@
 /** @typedef {{name: string; types?: string[] }} Package */
 
 /** @type {any} */
-let chalk;
-try {
-  chalk = require("chalk");
-} catch {
-  chalk = null;
-}
+const chalk = require("chalk");
 const fs = require("fs");
 const { exec } = require("child_process");
 let useYarn = false;
@@ -61,7 +56,7 @@ const commands = {
 // HELPERS
 
 /** Makes the script silently ignore them error. */
-process.on("unhandledRejection", () => {}); // throw err;
+process.on("unhandledRejection", console.log); // throw err;
 
 /** @param {string} pkgName */
 const getLibraryName = (pkgName) => `${scope}/${pkgName}`;
@@ -95,19 +90,11 @@ const execute = (command, message = "", showError = true) =>
   new Promise((resolve) => {
     exec(command, (error, stdout, stderr) => {
       if (error) {
-        showError &&
-          console.error(
-            chalk
-              ? chalk.red(`error: ${error.message}`)
-              : `error: ${error.message}`
-          );
+        showError && console.error(chalk.red(`error: ${error.message}`));
         resolve(error.message);
         return;
       }
-      if (message !== "")
-        console.log(
-          chalk ? chalk.magenta.bold(message + "\n") : message + "\n"
-        );
+      if (message !== "") console.log(chalk.magenta.bold(message + "\n"));
       resolve(stdout ? stdout : stderr);
     });
   });
@@ -138,11 +125,12 @@ const installPackages = async (tag = "latest", packages = []) => {
     toInstallPackages,
     /** @param {Package} pkg */
     async (pkg) => {
-      const messageInstallStart = `Installing library ${getLibraryName(
-        pkg.name
-      )}@${tag} using ${useYarn ? "Yarn" : "NPM"}:`;
       console.log(
-        chalk ? chalk.magenta(messageInstallStart) : messageInstallStart
+        chalk.magenta(
+          `Installing library ${getLibraryName(pkg.name)}@${tag} using ${
+            useYarn ? "Yarn" : "NPM"
+          }:`
+        )
       );
       const externalTypesMain = pkg.types || [];
       await execute(
@@ -166,11 +154,12 @@ const installPackages = async (tag = "latest", packages = []) => {
     async (pkg) => {
       const libraryName = getLibraryName(pkg.name);
       const externalTypes = pkg.types || [];
-      const messageLibraryUpdate = `Installing library ${libraryName}@${tag} using ${
-        useYarn ? "Yarn" : "NPM"
-      }`;
       console.log(
-        chalk ? chalk.magenta(messageLibraryUpdate) : messageLibraryUpdate
+        chalk.magenta(
+          `Installing library ${libraryName}@${tag} using ${
+            useYarn ? "Yarn" : "NPM"
+          }`
+        )
       );
       try {
         if (checkPackageInfo(pkg.name).version !== version) {
@@ -214,7 +203,7 @@ const checkParameter = async () => {
       else
         console.log(
           chalk.red(
-            `A version of @faharmony/core must be installed before installing other packages. Try running command again without any parameters.`
+            `A version of @faharmony/core must be installed before installing other packages. \nTry running command again without any package parameters.`
           )
         );
       break;
