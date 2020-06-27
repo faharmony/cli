@@ -147,7 +147,6 @@ const installPackages = async (tag = "latest", packages = []) => {
   );
 
   // Update common deps to match tagged version
-  const version = checkPackageInfo(core).version;
   await asyncForEach(
     commonPackages,
     /** @param {Package} pkg */
@@ -162,6 +161,7 @@ const installPackages = async (tag = "latest", packages = []) => {
         )
       );
       try {
+        const version = checkPackageInfo(core).version;
         if (checkPackageInfo(pkg.name).version !== version) {
           await execute(`${commands.remove()} ${libraryName}`);
           await execute(`${commands.install()} ${libraryName}@${version}`);
@@ -191,6 +191,8 @@ const checkParameter = async () => {
       break;
     case "LATEST":
     case "latest":
+    case "STABLE":
+    case "stable":
       await installPackages("latest", []);
       break;
 

@@ -6,10 +6,15 @@
   "author": "Siddhant Gupta <siddhant@fasolutions.com>",
   "license": "MIT",
   "dependencies": {
+    "@faharmony/core": "0.0.1",
     "chalk": "^4.1.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/faharmony/cli"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.14",
+    "@types/react": "^16.9.41"
   }
 }
