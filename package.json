@@ -1,0 +1,6 @@
+{
+  "name": "@faharmony/cli", 
+  "version": "0.0.1", 
+  "bin": "./index.js",
+  "author" : "Siddhant Gupta <siddhant@fasolutions.com>"
+}
