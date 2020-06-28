@@ -11,7 +11,7 @@ npx faharmony/cli
 
 -- or --
 
-npx faharmony/cli [param]
+npx faharmony/cli <param>
 ```
 
 The base command (without any params) will install the latest `core` package of harmony.

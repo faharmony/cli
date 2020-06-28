@@ -3,6 +3,7 @@
  * Harmony CLI
  * ---
  * Script to install and update Harmony framework.
+ * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
 // @ts-check
 
@@ -17,6 +18,10 @@ const { exec } = require("child_process");
 let useYarn = false;
 const args = process.argv.slice(2);
 const color = chalk.magenta;
+const bold = color.bold;
+const error = chalk.red;
+const link = chalk.blue;
+const webLink = "https://github.com/faharmony/cli";
 
 // Harmony libraries
 const scope = "@faharmony";
@@ -93,13 +98,13 @@ const checkPackageInfo = (pkgName) => {
  * @param {object} command @param {string!} message @return {Promise<string>} */
 const execute = (command, message = "", showError = true) =>
   new Promise((resolve) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        showError && console.error(chalk.red(`error: ${error.message}`));
-        resolve(error.message);
+    exec(command, (err, stdout, stderr) => {
+      if (err) {
+        showError && console.error(error(`error: ${err.message}`));
+        resolve(err.message);
         return;
       }
-      if (message !== "") console.log(color.bold(message + "\n"));
+      if (message !== "") console.log(bold(message + "\n"));
       resolve(stdout ? stdout : stderr);
     });
   });
@@ -189,7 +194,7 @@ const installMainPackage = async (pkg) => {
   if (corePkg) await installPackages(corePkg.tag, [pkg]);
   else
     console.log(
-      chalk.red(
+      error(
         `A version of @faharmony/core must be installed before installing other packages. \nTry running command again without any package parameters.`
       )
     );
@@ -208,16 +213,14 @@ const harmonyInfo = async () => {
         count++;
         console.log(
           color(
-            `[${pkgInfo.tag}] ${color.bold(
-              pkgInfo.name + "@" + pkgInfo.version
-            )}`
+            `[${pkgInfo.tag}] ${bold(pkgInfo.name + "@" + pkgInfo.version)}`
           )
         );
       }
     }
   );
   if (count === 0)
-    console.log(chalk.red(`No harmony libraries found in this project.`));
+    console.log(error(`No harmony libraries found in this project.`));
   else console.log(color(`${count} harmony libraries found in this project.`));
   return 0;
 };
@@ -227,20 +230,20 @@ const harmonyVersion = async () => {
   if (corePkg)
     console.log(
       color(
-        `Currently, installed version of harmony is ${color.bold(
+        `Currently, installed version of harmony is ${bold(
           corePkg.version
         )} (tag:${corePkg.tag}).`
       )
     );
   else
     console.log(
-      chalk.red(`No installed version of harmony found in this project.`)
+      error(`No installed version of harmony found in this project.`)
     );
 };
 
 const checkParameter = async () => {
   const param = args[0].trim().toLowerCase();
-  console.log(color(`Param: ${color.bold(param)}\n`));
+  console.log(color(`Param: ${bold(param)}\n`));
   switch (param) {
     // Tag params
     case "rc":
@@ -270,7 +273,7 @@ const checkParameter = async () => {
       break;
     case "help":
       console.log(color("Read about the CLI on GitHub at"));
-      console.log(chalk.blue("https://github.com/faharmony/cli"));
+      console.log(link(webLink));
       break;
 
     // No match
@@ -285,6 +288,8 @@ const checkParameter = async () => {
 
 // START
 (async () => {
+  // HEADER
+
   console.log("\n");
   cfonts.say("harmony", {
     font: "tiny",
@@ -292,13 +297,14 @@ const checkParameter = async () => {
     space: false,
   });
   console.log(
-    color.bold(` ${Array(31).join("—")}\n welcome to ☯️ harmony installer\n`)
+    bold(` ${Array(31).join("—")}\n welcome to ☯️ harmony installer\n`)
   );
+
+  // BODY
 
   // CHECK YARN
   const yarnVersion = await execute(`yarn --version`, "", false);
   if (yarnVersion.length < 20) useYarn = fs.existsSync(paths.yarnLock);
-
   if (args.length > 0) {
     // Match command parameter and perform
     await checkParameter();
@@ -313,6 +319,11 @@ const checkParameter = async () => {
     }
   }
 
+  // FOOTER
+
   console.log(color("\nWrapping up Harmony installer...\n"));
+  console.log(color("Made with 💜 at FA Solutions Oy."));
+  console.log(link(webLink));
+  console.log("");
 })();
 // END
