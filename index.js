@@ -297,7 +297,7 @@ const checkParameter = async () => {
     space: false,
   });
   console.log(
-    bold(` ${Array(31).join("—")}\n welcome to ☯️ harmony installer\n`)
+    bold(` ${Array(31).join("—")}\n  welcome to harm☯️ny installer\n`)
   );
 
   // BODY

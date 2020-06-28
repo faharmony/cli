@@ -1,4 +1,4 @@
-# :yin_yang: harmony CLI
+# ☯️ harmony CLI
 
 Node command line to install and manage Harmony framework.
 
