@@ -238,6 +238,11 @@ const checkParameter = async () => {
       await harmonyVersion();
       break;
 
+    case "help":
+      console.log(color("Read about the CLI on GitHub at"));
+      console.log(chalk.blue("https://github.com/faharmony/cli"));
+      break;
+
     // No match
     default:
       console.log(

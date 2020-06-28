@@ -53,3 +53,4 @@ An info param allows user retrieve some information about current setup.
 | param     | description                                              |
 | --------- | -------------------------------------------------------- |
 | `version` | Check current version of harmony packages (if installed) |
+| `help`    | Display link for README page                             |
