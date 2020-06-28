@@ -208,9 +208,9 @@ const harmonyInfo = async () => {
         count++;
         console.log(
           color(
-            `${color.bold(
-              getLibraryName(pkgInfo.name) + "@" + pkgInfo.version
-            )} (tag:${pkgInfo.tag}).`
+            `[${pkgInfo.tag}] ${color.bold(
+              pkgInfo.name + "@" + pkgInfo.version
+            )}`
           )
         );
       }
