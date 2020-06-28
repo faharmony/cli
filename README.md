@@ -50,7 +50,8 @@ A package param allows user to install other main packages of harmony. Since the
 
 An info param allows user retrieve some information about current setup.
 
-| param     | description                                              |
-| --------- | -------------------------------------------------------- |
-| `version` | Check current version of harmony packages (if installed) |
-| `help`    | Display link for README page                             |
+| param     | description                        |
+| --------- | ---------------------------------- |
+| `info`    | Display installed harmony packages |
+| `version` | Check installed version of harmony |
+| `help`    | Display link for README page       |

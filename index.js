@@ -196,14 +196,40 @@ const installMainPackage = async (pkg) => {
   return 0;
 };
 
+const harmonyInfo = async () => {
+  console.log(color(`Finding harmony libraries in this project...`));
+  let count = 0;
+  await asyncForEach(
+    mainPackages.concat(commonPackages),
+    /** @param {Package} pkg */
+    (pkg) => {
+      const pkgInfo = checkPackageInfo(pkg.name);
+      if (pkgInfo) {
+        count++;
+        console.log(
+          color(
+            `${color.bold(
+              getLibraryName(pkgInfo.name) + "@" + pkgInfo.version
+            )} (tag:${pkgInfo.tag}).`
+          )
+        );
+      }
+    }
+  );
+  if (count === 0)
+    console.log(chalk.red(`No harmony libraries found in this project.`));
+  else console.log(color(`${count} harmony libraries found in this project.`));
+  return 0;
+};
+
 const harmonyVersion = async () => {
   const corePkg = checkPackageInfo(core);
   if (corePkg)
     console.log(
       color(
-        `Current version of harmony is ${color.bold(corePkg.version)} (tag:${
-          corePkg.tag
-        }).`
+        `Currently, installed version of harmony is ${color.bold(
+          corePkg.version
+        )} (tag:${corePkg.tag}).`
       )
     );
   else
@@ -213,7 +239,9 @@ const harmonyVersion = async () => {
 };
 
 const checkParameter = async () => {
-  switch (args[0].trim().toLowerCase()) {
+  const param = args[0].trim().toLowerCase();
+  console.log(color(`Param: ${color.bold(param)}\n`));
+  switch (param) {
     // Tag params
     case "rc":
       await installPackages("RC", []);
@@ -234,10 +262,12 @@ const checkParameter = async () => {
       break;
 
     // Info params
+    case "info":
+      await harmonyInfo();
+      break;
     case "version":
       await harmonyVersion();
       break;
-
     case "help":
       console.log(color("Read about the CLI on GitHub at"));
       console.log(chalk.blue("https://github.com/faharmony/cli"));
