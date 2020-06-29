@@ -162,20 +162,27 @@ const installPackages = async (tag = "latest", packages = []) => {
     async (pkg) => {
       const libraryName = getLibraryName(pkg.name);
       const externalTypes = pkg.types || [];
-      console.log(
-        color(
-          `Installing library ${libraryName}@${tag} using ${
-            useYarn ? "Yarn" : "NPM"
-          }`
-        )
-      );
       try {
         const version = checkPackageInfo(core).version;
         if (checkPackageInfo(pkg.name).version !== version) {
+          console.log(
+            color(
+              `Installing library ${libraryName}@${version} using ${
+                useYarn ? "Yarn" : "NPM"
+              }`
+            )
+          );
           await execute(`${commands.remove()} ${libraryName}`);
           await execute(`${commands.install()} ${libraryName}@${version}`);
         }
       } catch {
+        console.log(
+          color(
+            `Installing library ${libraryName}@${tag} using ${
+              useYarn ? "Yarn" : "NPM"
+            }`
+          )
+        );
         await execute(`${commands.install()} ${libraryName}@${tag}`);
       } finally {
         if (externalTypes.length > 0)
