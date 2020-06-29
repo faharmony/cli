@@ -162,9 +162,13 @@ const installPackages = async (tag = "latest", packages = []) => {
     async (pkg) => {
       const libraryName = getLibraryName(pkg.name);
       const externalTypes = pkg.types || [];
-      try {
-        const version = checkPackageInfo(core).version;
-        if (checkPackageInfo(pkg.name).version !== version) {
+
+      const corePkg = checkPackageInfo(core);
+      const pkgInfo = checkPackageInfo(pkg.name);
+
+      if (pkgInfo && corePkg) {
+        const version = corePkg.version;
+        if (pkgInfo.version !== version) {
           console.log(
             color(
               `Installing library ${libraryName}@${version} using ${
@@ -175,7 +179,7 @@ const installPackages = async (tag = "latest", packages = []) => {
           await execute(`${commands.remove()} ${libraryName}`);
           await execute(`${commands.install()} ${libraryName}@${version}`);
         }
-      } catch {
+      } else {
         console.log(
           color(
             `Installing library ${libraryName}@${tag} using ${
@@ -184,12 +188,12 @@ const installPackages = async (tag = "latest", packages = []) => {
           )
         );
         await execute(`${commands.install()} ${libraryName}@${tag}`);
-      } finally {
-        if (externalTypes.length > 0)
-          await execute(
-            `${commands.install()} -D ${getTypeLibraries(externalTypes)}`
-          );
       }
+
+      if (externalTypes.length > 0)
+        await execute(
+          `${commands.install()} -D ${getTypeLibraries(externalTypes)}`
+        );
     }
   );
 };
@@ -219,9 +223,7 @@ const harmonyInfo = async () => {
       if (pkgInfo) {
         count++;
         console.log(
-          color(
-            `[${pkgInfo.tag}] ${bold(pkgInfo.name + "@" + pkgInfo.version)}`
-          )
+          color(`[${pkgInfo.tag}] ${bold(pkgInfo.name)}@${pkgInfo.version}`)
         );
       }
     }
