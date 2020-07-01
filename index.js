@@ -130,6 +130,8 @@ const installPackages = async (tag = "latest", packages = []) => {
     packages.includes(main.name)
   );
 
+  await execute(`rm -rf ${paths.nodeModules}/${scope}`);
+
   await asyncForEach(
     toInstallPackages,
     /** @param {Package} pkg */
