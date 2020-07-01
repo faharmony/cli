@@ -178,7 +178,7 @@ const installPackages = async (tag = "latest", packages = []) => {
               }`
             )
           );
-          await execute(`${commands.remove()} ${libraryName}`);
+          // await execute(`${commands.remove()} ${libraryName}`);
           await execute(`${commands.install()} ${libraryName}@${version}`);
         }
       } else {
