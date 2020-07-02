@@ -300,7 +300,6 @@ const checkParameter = async () => {
 // START
 (async () => {
   // HEADER
-
   console.log("\n");
   cfonts.say("harmony", {
     font: "tiny",
@@ -311,11 +310,11 @@ const checkParameter = async () => {
     bold(` ${Array(31).join("—")}\n  welcome to harm☯️ny installer\n`)
   );
 
-  // BODY
-
   // CHECK YARN
   const yarnVersion = await execute(`yarn --version`, "", false);
   if (yarnVersion.length < 20) useYarn = fs.existsSync(paths.yarnLock);
+
+  // BODY
   if (args.length > 0) {
     // Match command parameter and perform
     await checkParameter();
@@ -331,8 +330,8 @@ const checkParameter = async () => {
   }
 
   // FOOTER
-
   console.log(color("\nWrapping up Harmony installer...\n"));
+  if (!useYarn) await execute(`npm dedupe`);
   console.log(color("Made with 💜 at FA Solutions Oy."));
   console.log(link(webLink));
   console.log("");
