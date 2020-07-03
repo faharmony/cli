@@ -22,7 +22,6 @@ const {
   commands,
   asyncForEach,
   execute,
-  exec,
   outputs,
 } = require("./common");
 
@@ -186,6 +185,7 @@ const installMainPackage = async (pkg) => {
   return 0;
 };
 
+const { spawnSync } = require("child_process");
 /** Install/update module package and execute plop command to generate module template */
 const generateModule = async () => {
   const module = "module";
@@ -197,7 +197,7 @@ const generateModule = async () => {
   );
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
-  exec(`npx plop --plopfile ${pathPlop}`, console.log);
+  spawnSync(`npx plop --plopfile ${pathPlop}`);
   return 0;
 };
 

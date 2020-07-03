@@ -97,7 +97,6 @@ module.exports = {
   cfonts,
   fs,
   args,
-  exec,
   color,
   bold,
   error,
