@@ -54,8 +54,8 @@ const checkPackageInfo = (pkgName) => {
 };
 
 /** Function to install one package depending on tag/version
- * @param {string} tag @param {Package} pkg */
-const installPackage = async (tag, pkg) => {
+ * @param {string} tag @param {Package} pkg @param {string!} options */
+const installPackage = async (tag, pkg, options = "") => {
   const { name, types } = pkg;
   console.log(
     color(
@@ -67,7 +67,7 @@ const installPackage = async (tag, pkg) => {
   /** @type string[] */
   const externalTypesMain = types || [];
   await execute(
-    `${commands.install()} ${getLibraryName(pkg.name)}@${tag}`,
+    `${commands.install()} ${getLibraryName(pkg.name)}@${tag} ${options}`,
     `${tag.toUpperCase()} version of ${getLibraryName(
       name
     )} and its dependencies installed successfully.`
@@ -116,11 +116,13 @@ const installPackages = async (tag = "latest", packages = []) => {
       const version = corePkg.version;
       if (pkgInfo.version !== version) {
         log(libraryName, version);
-        await execute(`${commands.install()} ${libraryName}@${version}`);
+        await execute(
+          `${commands.install()} ${libraryName}@${version} --no-save`
+        );
       }
     } else {
       log(libraryName, tag);
-      await execute(`${commands.install()} ${libraryName}@${tag}`);
+      await execute(`${commands.install()} ${libraryName}@${tag} --no-save`);
     }
 
     if (externalTypes.length > 0)
@@ -189,12 +191,12 @@ const generateModule = async () => {
   const modulePkg = checkPackageInfo(module);
   await installPackage(
     (modulePkg && modulePkg.tag) || "latest",
-    commonPackages.find((pkg) => pkg.name === module)
+    commonPackages.find((pkg) => pkg.name === module),
+    "--no-save"
   );
   console.log(color(`Initiating module generator script...`));
-  await execute(
-    `npx plop --plopfile ${paths.nodeModules}${scope}/${module}/plop.js`
-  );
+  const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
+  await execute(`npx plop --plopfile ${pathPlop}`);
   return 0;
 };
 
