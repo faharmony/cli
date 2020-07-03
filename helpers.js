@@ -22,6 +22,7 @@ const {
   commands,
   asyncForEach,
   execute,
+  exec,
   outputs,
 } = require("./common");
 
@@ -196,8 +197,7 @@ const generateModule = async () => {
   );
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
-  const result = await execute(`npx plop --plopfile ${pathPlop}`, "", true);
-  console.log(result);
+  exec(`npx plop --plopfile ${pathPlop}`, console.log);
   return 0;
 };
 
