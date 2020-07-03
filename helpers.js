@@ -197,7 +197,14 @@ const generateModule = async () => {
   );
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
-  spawnSync(`npx plop --plopfile ${pathPlop}`);
+  require("child_process").spawnSync("npx plop", ["--plopfile", pathPlop], {
+    stdio: ["inherit", "inherit", "inherit"],
+  });
+  // const child = spawnSync(`npx plop --plopfile ${pathPlop}`, {
+  //   stdio: [0, "pipe"],
+  // });
+
+  // child.stdout.on("data", console.log);
   return 0;
 };
 
