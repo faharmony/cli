@@ -52,6 +52,15 @@ An info param allows user retrieve some information about current setup.
 
 | param     | description                        |
 | --------- | ---------------------------------- |
+| `about`   | Read about harmony                 |
 | `info`    | Display installed harmony packages |
 | `version` | Check installed version of harmony |
 | `help`    | Display link for README page       |
+
+#### Other param
+
+Other params can be misc. like running other scripts.
+
+| param    | description                        |
+| -------- | ---------------------------------- |
+| `module` | Generate harmony module using plop |
