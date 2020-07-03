@@ -30,11 +30,11 @@ The command can take one optional param which can be used to configure usage of 
 
 A tag param allows user to decide which tagged version of harmony to install.
 
-| param      | description                                              |
-| ---------- | -------------------------------------------------------- |
-| `stable`   | Install latest STABLE (released) version of harmony      |
-| `rc`       | Install latest RC (freeze) version of harmony            |
-| `snapshot` | Install latest SNAPSHOT (development) version of harmony |
+| param             | description                                              |
+| ----------------- | -------------------------------------------------------- |
+| `--stable`        | Install latest STABLE (released) version of harmony      |
+| `--rc`            | Install latest RC (freeze) version of harmony            |
+| `-s | --snapshot` | Install latest SNAPSHOT (development) version of harmony |
 
 #### Package param
 
@@ -50,17 +50,17 @@ A package param allows user to install other main packages of harmony. Since the
 
 An info param allows user retrieve some information about current setup.
 
-| param     | description                        |
-| --------- | ---------------------------------- |
-| `about`   | Read about harmony                 |
-| `info`    | Display installed harmony packages |
-| `version` | Check installed version of harmony |
-| `help`    | Display link for README page       |
+| param            | description                            |
+| ---------------- | -------------------------------------- |
+| `-a | --about`   | Read about harmony                     |
+| `-i | --info`    | Display installed harmony packages     |
+| `-v | --version` | Check installed version of harmony     |
+| `-h | --help`    | Display help for harmony params (this) |
 
 #### Other param
 
 Other params can be misc. like running other scripts.
 
-| param    | description                        |
-| -------- | ---------------------------------- |
-| `module` | Generate harmony module using plop |
+| param                        | description                                                                                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `-m | --module <moduleName>` | Generate harmony module using plop. Requires "moduleName" as second param. Eg. `npx faharmony/cli -m sample` |

@@ -26,21 +26,27 @@ const {
   checkPackageInfo,
   generateModule,
 } = require("./helpers");
-const { harmonyAbout, harmonyInfo, harmonyVersion } = require("./info");
+const {
+  harmonyAbout,
+  harmonyInfo,
+  harmonyVersion,
+  harmonyHelp,
+} = require("./info");
 
 const checkParameter = async () => {
+  console.log(`Param: ${bold(args.join(" "))}\n`);
   const param = args[0].trim().toLowerCase();
-  console.log(color(`Param: ${bold(param)}\n`));
   switch (param) {
     // Tag params
-    case "rc":
+    case "--rc":
       await installPackages("RC", []);
       break;
-    case "snapshot":
+    case "--snapshot":
+    case "-s":
       await installPackages("SNAPSHOT", []);
       break;
-    case "latest":
-    case "stable":
+    case "--latest":
+    case "--stable":
       await installPackages("latest", []);
       break;
 
@@ -52,22 +58,26 @@ const checkParameter = async () => {
       break;
 
     // Info params
-    case "about":
+    case "--about":
+    case "-a":
       await harmonyAbout();
       break;
-    case "info":
+    case "--info":
+    case "-i":
       await harmonyInfo();
       break;
-    case "version":
+    case "--version":
+    case "-v":
       await harmonyVersion();
       break;
-    case "help":
-      console.log(color("Read about the CLI on GitHub at"));
-      console.log(link(webLink));
+    case "--help":
+    case "-h":
+      await harmonyHelp();
       break;
 
     // Other param
-    case "module":
+    case "--module":
+    case "-m":
       await generateModule();
       break;
 

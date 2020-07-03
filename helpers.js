@@ -13,6 +13,7 @@
 const {
   useYarn,
   color,
+  args,
   error,
   scope,
   core,
@@ -99,18 +100,17 @@ const installPackages = async (tag = "latest", packages = []) => {
 
   // Update common deps to match tagged version
   for (const pkg of commonPackages) {
-    const libraryName = getLibraryName(pkg.name);
-    const externalTypes = pkg.types || [];
-
-    const corePkg = checkPackageInfo(core);
-    const pkgInfo = checkPackageInfo(pkg.name);
-
     const log = (name, version) =>
       console.log(
         color(
           `Installing library ${name}@${version} using ${outputs.manager()}`
         )
       );
+    const libraryName = getLibraryName(pkg.name);
+    const externalTypes = pkg.types || [];
+
+    const corePkg = checkPackageInfo(core);
+    const pkgInfo = checkPackageInfo(pkg.name);
 
     if (pkgInfo && corePkg) {
       const version = corePkg.version;
@@ -187,27 +187,27 @@ const installMainPackage = async (pkg) => {
 
 /** Install/update module package and execute plop command to generate module template */
 const generateModule = async () => {
+  const moduleName = args[1] ? args[1].trim().toLowerCase() : "";
+  if (moduleName === "") {
+    console.log(error(`Module name was not provided in command. See help.`));
+    return 1;
+  }
+
   const module = "module";
-  // const modulePkg = checkPackageInfo(module);
-  // await installPackage(
-  //   (modulePkg && modulePkg.tag) || "latest",
-  //   commonPackages.find((pkg) => pkg.name === module),
-  //   "--no-save"
-  // );
+  const modulePkg = checkPackageInfo(module);
+  await installPackage(
+    (modulePkg && modulePkg.tag) || "latest",
+    commonPackages.find((pkg) => pkg.name === module),
+    "--no-save"
+  );
+
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
-  // require("child_process").spawnSync("npx plop", ["--plopfile", pathPlop], {
-  //   stdio: ["inherit", "inherit", "inherit"],
-  // });
-
-  let child = require("child_process").spawn(`npx plop --plopfile ${pathPlop}`);
-  child.stdout.pipe(process.stdout);
-  child.stderr.pipe(process.stderr);
-  process.stdin.pipe(child.stdin);
-
-  child.on("exit", () => console.log("exit"));
-  child.on("error", console.log);
-
+  await execute(
+    `npx plop --plopfile ${pathPlop} ${moduleName}`,
+    `New module "${moduleName}" is generated.`,
+    true
+  );
   return 0;
 };
 
