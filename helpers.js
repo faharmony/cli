@@ -196,6 +196,7 @@ const generateModule = async () => {
   );
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
+  console.log(pathPlop);
   await execute(`npx plop --plopfile ${pathPlop}`);
   return 0;
 };
