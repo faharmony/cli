@@ -185,26 +185,30 @@ const installMainPackage = async (pkg) => {
   return 0;
 };
 
-const { spawnSync } = require("child_process");
 /** Install/update module package and execute plop command to generate module template */
 const generateModule = async () => {
   const module = "module";
-  const modulePkg = checkPackageInfo(module);
-  await installPackage(
-    (modulePkg && modulePkg.tag) || "latest",
-    commonPackages.find((pkg) => pkg.name === module),
-    "--no-save"
-  );
+  // const modulePkg = checkPackageInfo(module);
+  // await installPackage(
+  //   (modulePkg && modulePkg.tag) || "latest",
+  //   commonPackages.find((pkg) => pkg.name === module),
+  //   "--no-save"
+  // );
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
-  require("child_process").spawnSync("npx plop", ["--plopfile", pathPlop], {
-    stdio: ["inherit", "inherit", "inherit"],
-  });
-  // const child = spawnSync(`npx plop --plopfile ${pathPlop}`, {
-  //   stdio: [0, "pipe"],
+  // require("child_process").spawnSync("npx plop", ["--plopfile", pathPlop], {
+  //   stdio: ["inherit", "inherit", "inherit"],
   // });
 
-  // child.stdout.on("data", console.log);
+  const { spawn } = require("child_process");
+  var child = spawn("npx plop", ["--plopfile", pathPlop]);
+
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
+  process.stdin.pipe(child.stdin);
+
+  child.on("exit", () => process.exit());
+
   return 0;
 };
 
