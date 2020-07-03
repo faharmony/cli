@@ -200,11 +200,7 @@ const generateModule = async () => {
   //   stdio: ["inherit", "inherit", "inherit"],
   // });
 
-  let child = require("child_process").spawn("npx plop", [
-    "--plopfile",
-    pathPlop,
-  ]);
-
+  let child = require("child_process").spawn(`npx plop --plopfile ${pathPlop}`);
   child.stdout.pipe(process.stdout);
   child.stderr.pipe(process.stderr);
   process.stdin.pipe(child.stdin);
