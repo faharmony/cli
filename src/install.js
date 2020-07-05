@@ -24,35 +24,12 @@ const {
   asyncForEach,
   execute,
   outputs,
+  getLibraryName,
+  getTypeLibraries,
+  checkPackageInfo,
 } = require("./common");
 
-// HELPERS
-
-/** @param {string} pkgName */
-const getLibraryName = (pkgName) => `${scope}/${pkgName}`;
-
-/** @param {string[]} packages */
-const getTypeLibraries = (packages) =>
-  packages.map((pkg) => `@types/${pkg}`).join(" ");
-
-/** Get info from package.json of package
- *  @param {string} pkgName */
-const checkPackageInfo = (pkgName) => {
-  try {
-    const pkgJson = require(paths.nodeModules +
-      getLibraryName(pkgName) +
-      "/package.json");
-    const version = pkgJson.version;
-    const tag = version.includes("RC")
-      ? "RC"
-      : version.includes("SNAPSHOT")
-      ? "SNAPSHOT"
-      : "latest";
-    return { version, tag, name: pkgJson.name };
-  } catch {
-    return null;
-  }
-};
+// INSTALL
 
 /** Function to install one package depending on tag/version
  * @param {string} tag @param {Package} pkg @param {string!} options */
@@ -179,7 +156,9 @@ const installMainPackage = async (pkg) => {
   else
     console.log(
       error(
-        `A version of @faharmony/core must be installed before installing other packages. \nTry running command again without any package parameters.`
+        `A version of @faharmony/core must be installed before installing other packages. 
+Try running command again without any package parameters.
+Or use param --help / -h to know more about other params.`
       )
     );
   return 0;
@@ -189,7 +168,10 @@ const installMainPackage = async (pkg) => {
 const generateModule = async () => {
   const moduleName = args[1] ? args[1].trim().toLowerCase() : "";
   if (moduleName === "") {
-    console.log(error(`Module name was not provided in command. See help.`));
+    console.log(
+      error(`Module name was not provided in command. 
+See help (param --help / -h).`)
+    );
     return 1;
   }
 

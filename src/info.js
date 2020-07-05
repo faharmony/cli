@@ -22,8 +22,8 @@ const {
   asyncForEach,
   link,
   webLink,
+  checkPackageInfo,
 } = require("./common");
-const { checkPackageInfo } = require("./helpers");
 
 /** Learn about harmony */
 const harmonyAbout = async () => {
@@ -57,7 +57,10 @@ const harmonyInfo = async () => {
     }
   );
   if (count === 0)
-    console.log(error(`No harmony libraries found in this project.`));
+    console.log(
+      error(`No harmony libraries found in this project.
+Use param --help / -h to know more about other options.`)
+    );
   else console.log(color(`${count} harmony libraries found in this project.`));
   return 0;
 };
@@ -68,14 +71,15 @@ const harmonyVersion = async () => {
   if (corePkg)
     console.log(
       color(
-        `Currently, installed version of harmony is ${bold(
-          corePkg.version
-        )} (tag:${corePkg.tag}).`
+        `Installed version of harmony is \n${bold(corePkg.version)} (tag:${
+          corePkg.tag
+        }).`
       )
     );
   else
     console.log(
-      error(`No installed version of harmony found in this project.`)
+      error(`No installed version of harmony found in this project.
+Use param --help / -h to know more about other options.`)
     );
 };
 

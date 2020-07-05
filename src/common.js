@@ -12,7 +12,6 @@
 
 /** @type {any} */
 const chalk = require("chalk");
-const cfonts = require("cfonts");
 const fs = require("fs");
 const { exec } = require("child_process");
 const args = process.argv.slice(2);
@@ -92,9 +91,34 @@ const execute = (command, message = "", showError = true) =>
     });
   });
 
+/** @param {string} pkgName */
+const getLibraryName = (pkgName) => `${scope}/${pkgName}`;
+
+/** @param {string[]} packages */
+const getTypeLibraries = (packages) =>
+  packages.map((pkg) => `@types/${pkg}`).join(" ");
+
+/** Get info from package.json of package
+ *  @param {string} pkgName */
+const checkPackageInfo = (pkgName) => {
+  try {
+    const pkgJson = require(paths.nodeModules +
+      getLibraryName(pkgName) +
+      "/package.json");
+    const version = pkgJson.version;
+    const tag = version.includes("RC")
+      ? "RC"
+      : version.includes("SNAPSHOT")
+      ? "SNAPSHOT"
+      : "latest";
+    return { version, tag, name: pkgJson.name };
+  } catch {
+    return null;
+  }
+};
+
 module.exports = {
   chalk,
-  cfonts,
   fs,
   args,
   color,
@@ -112,4 +136,7 @@ module.exports = {
   execute,
   useYarn,
   outputs,
+  getLibraryName,
+  getTypeLibraries,
+  checkPackageInfo,
 };

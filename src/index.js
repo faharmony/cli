@@ -1,31 +1,22 @@
 #!/usr/bin/env node
+// @ts-check
 /**
  * Harmony CLI
  * ---
  * Script to install and update Harmony framework.
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
-// @ts-check
 
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
 
-const {
-  args,
-  color,
-  bold,
-  link,
-  webLink,
-  chalk,
-  cfonts,
-  core,
-} = require("./common");
+const { args, color, bold, link, webLink, chalk, core } = require("./common");
 const {
   installMainPackage,
   installPackages,
   checkPackageInfo,
   generateModule,
-} = require("./helpers");
+} = require("./install");
 const {
   harmonyAbout,
   harmonyInfo,
@@ -34,7 +25,6 @@ const {
 } = require("./info");
 
 const checkParameter = async () => {
-  console.log(`Param: ${bold(args.join(" "))}\n`);
   const param = args[0].trim().toLowerCase();
   switch (param) {
     // Tag params
@@ -91,20 +81,28 @@ const checkParameter = async () => {
   }
 };
 
-// START
-(async () => {
-  // HEADER
-  console.log("\n");
-  cfonts.say("harmony", {
-    font: "tiny",
-    colors: ["magenta"],
-    space: false,
-  });
-  console.log(
-    bold(` ${Array(31).join("—")}\n  welcome to harm☯️ny installer\n`)
-  );
+const header = () => {
+  const message = "Welcome to FA harm☯️ny CLI.";
+  const length = message.length + 4;
+  const line = Array(length).join("━");
+  const space = Array(length).join(" ");
+  const params = args.length ? `Param: ${args.join(" ")}` : "No param";
+  const paramsSpace = Array(message.length - params.length).join(" ");
+  const topLine = `┏${line}┓`;
+  const middleLine = `┃  ${bold(message)}  ┃`;
+  const spaceLine = `┃${space}┃`;
+  const bottomLine = `┗${line}┛`;
+  const paramLine = `┃  ${params}${paramsSpace}  ┃`;
+  const box = `\n${topLine}\n${middleLine}\n${paramLine}\n${bottomLine}\n`;
+  console.log(box);
+};
 
-  // BODY
+const footer = () => {
+  console.log(color("\nMade with 💜 at FA Solutions Oy."));
+  console.log(link(webLink) + "\n");
+};
+
+const main = async () => {
   if (args.length > 0) {
     // Match command parameter and perform
     await checkParameter();
@@ -114,15 +112,15 @@ const checkParameter = async () => {
       // Update preinstalled libraries
       await installPackages(corePkg.tag, []);
     } else {
-      // If core package is not installed, then install version with @latest tag.
+      // If core package is not installed,
+      // then install version with @latest tag.
       await installPackages("latest");
     }
   }
+};
 
-  // FOOTER
-  console.log(color("\nWrapping up Harmony installer...\n"));
-  console.log(color("Made with 💜 at FA Solutions Oy."));
-  console.log(link(webLink));
-  console.log("");
-})();
+// START
+header();
+main();
+footer();
 // END
