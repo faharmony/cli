@@ -158,7 +158,7 @@ const installMainPackage = async (pkg) => {
       error(
         `A version of @faharmony/core must be installed before installing other packages. 
 Try running command again without any package parameters.
-Or use param --help / -h to know more about other params.`
+Or use param --help / -h for help.`
       )
     );
   return 0;
@@ -166,11 +166,11 @@ Or use param --help / -h to know more about other params.`
 
 /** Install/update module package and execute plop command to generate module template */
 const generateModule = async () => {
-  const moduleName = args[1] ? args[1].trim().toLowerCase() : "";
-  if (moduleName === "") {
+  const moduleId = args[1] ? args[1].trim().toLowerCase() : "";
+  if (moduleId === "") {
     console.log(
-      error(`Module name was not provided in command. 
-See help (param --help / -h).`)
+      error(`ModuleID was not provided in command. 
+Use param --help / -h for help.`)
     );
     return 1;
   }
@@ -186,8 +186,8 @@ See help (param --help / -h).`)
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
   await execute(
-    `npx plop --plopfile ${pathPlop} ${moduleName}`,
-    `New module "${moduleName}" is generated.`,
+    `npx plop --plopfile ${pathPlop} ${moduleId}`,
+    `New module "${moduleId}" is generated.`,
     true
   );
   return 0;

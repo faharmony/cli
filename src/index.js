@@ -102,7 +102,10 @@ const footer = () => {
   console.log(link(webLink) + "\n");
 };
 
-const main = async () => {
+// START
+(async () => {
+  header();
+
   if (args.length > 0) {
     // Match command parameter and perform
     await checkParameter();
@@ -117,10 +120,7 @@ const main = async () => {
       await installPackages("latest");
     }
   }
-};
 
-// START
-header();
-main();
-footer();
+  footer();
+})();
 // END

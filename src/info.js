@@ -59,7 +59,7 @@ const harmonyInfo = async () => {
   if (count === 0)
     console.log(
       error(`No harmony libraries found in this project.
-Use param --help / -h to know more about other options.`)
+Use param --help / -h for help.`)
     );
   else console.log(color(`${count} harmony libraries found in this project.`));
   return 0;
@@ -79,7 +79,7 @@ const harmonyVersion = async () => {
   else
     console.log(
       error(`No installed version of harmony found in this project.
-Use param --help / -h to know more about other options.`)
+Use param --help / -h for help.`)
     );
 };
 
@@ -141,9 +141,9 @@ const harmonyHelp = async () => {
     other: {
       description: "Other params can be misc. like running other scripts.",
       module: {
-        cmd: "-m | --module <moduleName>",
+        cmd: "-m | --module <moduleId>",
         description:
-          "Generate harmony module using plop. Requires `moduleName` as second param.",
+          "Generate harmony module using plop. Requires `moduleId` as second param.",
         example: "npx faharmony/cli -m sample",
       },
     },

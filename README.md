@@ -61,6 +61,6 @@ An info param allows user retrieve some information about current setup.
 
 Other params can be misc. like running other scripts.
 
-| param                        | description                                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `-m | --module <moduleName>` | Generate harmony module using plop. Requires "moduleName" as second param. Eg. `npx faharmony/cli -m sample` |
+| param                      | description                                                                                                |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `-m | --module <moduleId>` | Generate harmony module using plop. Requires "moduleId" as second param. Eg. `npx faharmony/cli -m sample` |
