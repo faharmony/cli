@@ -52,7 +52,7 @@ const installPackage = async (tag, pkg, options = "") => {
   );
   if (externalTypesMain.length > 0)
     await execute(
-      `${commands.install()} -D ${getTypeLibraries(externalTypesMain)}`
+      `${commands.install()} --no-save ${getTypeLibraries(externalTypesMain)}`
     );
 };
 

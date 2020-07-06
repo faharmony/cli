@@ -38,6 +38,7 @@ const commonPackages = [
   { name: "navigation" },
   { name: "router", types: ["react-router-dom"] },
   { name: "service" },
+  { name: "state", types: ["react-redux", "webpack-env"] },
   { name: "theme" },
   { name: "views" },
 ];
@@ -109,8 +110,8 @@ const checkPackageInfo = (pkgName) => {
     const tag = version.includes("RC")
       ? "RC"
       : version.includes("SNAPSHOT")
-      ? "SNAPSHOT"
-      : "latest";
+        ? "SNAPSHOT"
+        : "latest";
     return { version, tag, name: pkgJson.name };
   } catch {
     return null;
