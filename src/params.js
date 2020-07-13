@@ -7,11 +7,10 @@
  */
 // @ts-check
 
-const { args, chalk, bold, } = require("./common");
+const { args, chalk, bold, getHelp } = require("./common");
 const {
     installMainPackage,
     installPackages,
-    generateModule,
 } = require("./install");
 const {
     harmonyAbout,
@@ -19,6 +18,7 @@ const {
     harmonyVersion,
 } = require("./info");
 const { syncRepo } = require("./sync");
+const { generateModule } = require("./module");
 
 const params = {
     tag: {
@@ -158,7 +158,7 @@ const checkParam = async () => {
     if (info.name !== '') { await info.exec(); return; }
     // Else (no match)
     console.log(chalk.red.bold("Error: The command is incorrect."));
-    console.log("Use param --help or -h for help.");
+    getHelp();
 }
 
 

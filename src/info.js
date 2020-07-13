@@ -19,6 +19,7 @@ const {
   error,
   asyncForEach,
   checkPackageInfo,
+  getHelp
 } = require("./common");
 
 /** Learn about harmony */
@@ -52,11 +53,7 @@ const harmonyInfo = async () => {
       }
     }
   );
-  if (count === 0)
-    console.log(
-      error(`No harmony libraries found in this project.
-Use param --help / -h for help.`)
-    );
+  if (count === 0) { console.log(error(`No harmony libraries found in this project.`)); getHelp(); }
   else console.log(color(`${count} harmony libraries found in this project.`));
 };
 
@@ -71,11 +68,10 @@ const harmonyVersion = async () => {
         }).`
       )
     );
-  else
-    console.log(
-      error(`No installed version of harmony found in this project.
-Use param --help / -h for help.`)
-    );
+  else {
+    console.log(error(`No installed version of harmony found in this project.`));
+    getHelp();
+  }
 };
 
 

@@ -118,6 +118,9 @@ const checkPackageInfo = (pkgName) => {
   }
 };
 
+// getHelp function
+const getHelp = () => console.log("Use param --help or -h for help.");
+
 module.exports = {
   chalk,
   fs,
@@ -140,4 +143,5 @@ module.exports = {
   getLibraryName,
   getTypeLibraries,
   checkPackageInfo,
+  getHelp
 };

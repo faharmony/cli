@@ -13,7 +13,6 @@
 const {
   useYarn,
   color,
-  args,
   error,
   scope,
   core,
@@ -27,6 +26,7 @@ const {
   getLibraryName,
   getTypeLibraries,
   checkPackageInfo,
+  getHelp
 } = require("./common");
 
 // INSTALL
@@ -153,51 +153,20 @@ const installPackages = async (tag = "latest", packages = []) => {
 const installMainPackage = async (pkg) => {
   const corePkg = checkPackageInfo(core);
   if (corePkg) await installPackages(corePkg.tag, [pkg]);
-  else
+  else {
     console.log(
       error(
         `A version of @faharmony/core must be installed before installing other packages. 
-Try running command again without any package parameters.
-Or use param --help / -h for help.`
+Try running command again without any package parameters.`
       )
     );
-  return 0;
-};
-
-/** Install/update module package and execute plop command to generate module template */
-const generateModule = async () => {
-  const moduleId = args[1] ? args[1].trim().toLowerCase() : "";
-  if (moduleId === "") {
-    console.log(
-      error(`ModuleID was not provided in command. 
-Use param --help / -h for help.`)
-    );
-    return 1;
+    getHelp();
   }
-
-  const module = "module";
-  const modulePkg = checkPackageInfo(module);
-  await installPackage(
-    (modulePkg && modulePkg.tag) || "latest",
-    commonPackages.find((pkg) => pkg.name === module),
-    "--no-save"
-  );
-
-  console.log(color(`Initiating module generator script...`));
-  const pathPlop = `${paths.nodeModules}${scope}/${module}/plop.js`;
-  await execute(
-    `npx plop --plopfile ${pathPlop} ${moduleId}`,
-    `New module "${moduleId}" is generated.`,
-    true
-  );
   return 0;
 };
 
 module.exports = {
   checkPackageInfo,
-  getLibraryName,
-  getTypeLibraries,
   installPackages,
   installMainPackage,
-  generateModule,
 };
