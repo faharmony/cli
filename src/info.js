@@ -14,7 +14,6 @@ const {
   commonPackages,
   mainPackages,
   core,
-  chalk,
   color,
   bold,
   error,
@@ -59,7 +58,6 @@ const harmonyInfo = async () => {
 Use param --help / -h for help.`)
     );
   else console.log(color(`${count} harmony libraries found in this project.`));
-  return 0;
 };
 
 /** Check version of installed harmony packages */
@@ -80,97 +78,32 @@ Use param --help / -h for help.`)
     );
 };
 
-/** Check version of installed harmony packages */
-const harmonyHelp = async () => {
-  const help = {
-    tag: {
-      description:
-        "A tag param allows user to decide which tagged version of harmony to install.",
-      stable: {
-        cmd: "--stable",
-        description: "Install latest STABLE (released) version of harmony",
-      },
-      freeze: {
-        cmd: "--rc",
-        description: "Install latest RC (freeze) version of harmony",
-      },
-      snapshot: {
-        cmd: "-s | --snapshot",
-        description: "Install latest SNAPSHOT (development) version of harmony",
-      },
-    },
-    package: {
-      description:
-        "A package param allows user to install other main packages of harmony. Since these packages depend on `core` package, do run the command without package params before installing these packages.",
-      table: {
-        cmd: "table",
-        description: "Install harmony's table package",
-      },
-      charts: {
-        cmd: "charts",
-        description: "Install harmony's charts package",
-      },
-      form: {
-        cmd: "form",
-        description: "Install harmony's form package",
-      },
-    },
-    info: {
-      description:
-        "An info param allows user retrieve some information about current setup.",
-      about: {
-        cmd: "-a | --about",
-        description: "Read about harmony",
-      },
-      info: {
-        cmd: "-i | --info",
-        description: "Display installed harmony packages",
-      },
-      version: {
-        cmd: "-v | --version",
-        description: "Check installed version of harmony",
-      },
-      help: {
-        cmd: "-h | --help",
-        description: "Display help for harmony (this)",
-      },
-    },
-    other: {
-      description: "Other params can be misc. like running other scripts.",
-      module: {
-        cmd: "-m | --module <moduleId>",
-        description:
-          "Generate harmony module using plop. Requires `moduleId` as second param.",
-        example: "npx faharmony/cli -m sample",
-      },
-      sync: {
-        cmd: "--sync",
-        description:
-          "Synchronize current branch with FA_REACT_APP repo template.",
-        example: "npx faharmony/cli --sync",
-      },
-    },
-  };
-  console.log("Usage: " + bold("npx faharmony/cli [param]"));
-  console.log(
-    "\nwhere param (optional, case-insensitive) is one of the following:"
-  );
-  const whiteBold = chalk.bold;
-  const green = chalk.green;
-  const tab = "  ";
-  for (const type in help) {
-    console.log("\n" + whiteBold(type.toUpperCase() + " params"));
-    const desc = help[type].description;
-    desc && console.log(desc + "\n");
-    for (const param in help[type]) {
-      if (param !== "description") {
-        const pObj = help[type][param];
-        console.log(tab + whiteBold(pObj.cmd));
-        pObj.description && console.log(tab + tab + pObj.description);
-        pObj.example && console.log(tab + tab + "Eg. " + green(pObj.example));
-      }
-    }
-  }
-};
 
-module.exports = { harmonyAbout, harmonyInfo, harmonyVersion, harmonyHelp };
+// const { params } = require('./params');
+
+// /** Check version of installed harmony packages */
+// const harmonyHelp = async () => {
+//   console.log("Usage: " + bold("npx faharmony/cli [param]"));
+//   console.log(
+//     "\nwhere param (optional, case-insensitive) is one of the following:"
+//   );
+//   const whiteBold = chalk.bold;
+//   const green = chalk.green;
+//   const tab = "  ";
+//   console.log(params)
+//   for (const type in params) {
+//     console.log("\n" + whiteBold(type.toUpperCase() + " params"));
+//     const desc = params[type].description;
+//     desc && console.log(desc + "\n");
+//     for (const param in params[type]) {
+//       if (param !== "description") {
+//         const pObj = params[type][param];
+//         console.log(tab + whiteBold(pObj.param.join(", ")));
+//         pObj.description && console.log(tab + tab + pObj.description);
+//         pObj.example && console.log(tab + tab + "Eg. " + green(pObj.example));
+//       }
+//     }
+//   }
+// };
+
+module.exports = { harmonyAbout, harmonyInfo, harmonyVersion };
