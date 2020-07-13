@@ -32,7 +32,7 @@ The command can take one optional param which can be used to configure usage of 
 |                 | Eg. `npx faharmony/cli --version`                           |
 |                 |                                                             |
 | `--install, -i` | Install harmony's packages.                                 |
-|                 | Second param: core, table, charts, form                     |
+|                 | Second param: table, charts, form                           |
 |                 | Eg. `npx faharmony/cli --install table`                     |
 |                 |                                                             |
 | `--module, -m`  | Generate harmony module using plop.                         |
