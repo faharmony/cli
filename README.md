@@ -64,3 +64,4 @@ Other params can be misc. like running other scripts.
 | param                      | description                                                                                                |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `-m | --module <moduleId>` | Generate harmony module using plop. Requires "moduleId" as second param. Eg. `npx faharmony/cli -m sample` |
+| `--sync`                   | Synchronize current branch with FA_REACT_APP repo template. Eg. `npx faharmony/cli --sync`                 |

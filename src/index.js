@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// @ts-check
 /**
  * Harmony CLI
  * ---
  * Script to install and update Harmony framework.
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
+// @ts-check
 
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
@@ -23,6 +23,7 @@ const {
   harmonyVersion,
   harmonyHelp,
 } = require("./info");
+const { syncRepo } = require("./sync");
 
 const checkParameter = async () => {
   const param = args[0].trim().toLowerCase();
@@ -70,6 +71,9 @@ const checkParameter = async () => {
     case "-m":
       await generateModule();
       break;
+    case "--sync":
+      await syncRepo();
+      break;
 
     // No match
     default:
@@ -82,7 +86,7 @@ const checkParameter = async () => {
 };
 
 const header = () => {
-  const message = "Welcome to FA harm☯️ny CLI.";
+  const message = "Welcome to FA harm☯️ny CLI ";
   const length = message.length + 4;
   const line = Array(length).join("━");
   const space = Array(length).join(" ");

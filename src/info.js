@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// INFO PARAMS
 /**
  * Harmony CLI
  * ---
@@ -20,8 +19,6 @@ const {
   bold,
   error,
   asyncForEach,
-  link,
-  webLink,
   checkPackageInfo,
 } = require("./common");
 
@@ -72,7 +69,7 @@ const harmonyVersion = async () => {
     console.log(
       color(
         `Installed version of harmony is \n${bold(corePkg.version)} (tag:${
-          corePkg.tag
+        corePkg.tag
         }).`
       )
     );
@@ -145,6 +142,12 @@ const harmonyHelp = async () => {
         description:
           "Generate harmony module using plop. Requires `moduleId` as second param.",
         example: "npx faharmony/cli -m sample",
+      },
+      sync: {
+        cmd: "--sync",
+        description:
+          "Synchronize current branch with FA_REACT_APP repo template.",
+        example: "npx faharmony/cli --sync",
       },
     },
   };
