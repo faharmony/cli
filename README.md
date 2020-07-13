@@ -26,42 +26,22 @@ The command can take one optional param which can be used to configure usage of 
 
 > All params are case-insensitive.
 
-#### Tag param
-
-A tag param allows user to decide which tagged version of harmony to install.
-
-| param             | description                                              |
-| ----------------- | -------------------------------------------------------- |
-| `--stable`        | Install latest STABLE (released) version of harmony      |
-| `--rc`            | Install latest RC (freeze) version of harmony            |
-| `-s | --snapshot` | Install latest SNAPSHOT (development) version of harmony |
-
-#### Package param
-
-A package param allows user to install other main packages of harmony. Since these packages depend on `core` package, do run the command without package params before installing these packages.
-
-| param    | description                      |
-| -------- | -------------------------------- |
-| `table`  | Install harmony's table package  |
-| `charts` | Install harmony's charts package |
-| `form`   | Install harmony's form package   |
-
-#### Info param
-
-An info param allows user retrieve some information about current setup.
-
-| param            | description                            |
-| ---------------- | -------------------------------------- |
-| `-a | --about`   | Read about harmony                     |
-| `-i | --info`    | Display installed harmony packages     |
-| `-v | --version` | Check installed version of harmony     |
-| `-h | --help`    | Display help for harmony params (this) |
-
-#### Other param
-
-Other params can be misc. like running other scripts.
-
-| param                      | description                                                                                                |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `-m | --module <moduleId>` | Generate harmony module using plop. Requires "moduleId" as second param. Eg. `npx faharmony/cli -m sample` |
-| `--sync`                   | Synchronize current branch with FA_REACT_APP repo template. Eg. `npx faharmony/cli --sync`                 |
+| param            | description                                                 |
+| ---------------- | ----------------------------------------------------------- |
+| `--version | -v` | Check installed version of harmony.                         |
+|                  | Eg. `npx faharmony/cli --version`                           |
+|                  |                                                             |
+| `--install | -i` | Install harmony's packages.                                 |
+|                  | Second param: core, table, charts, form                     |
+|                  | Eg. `npx faharmony/cli --install table`                     |
+|                  |                                                             |
+| `--module | -m`  | Generate harmony module using plop.                         |
+|                  | Second param: ModuleID (string with all-lowercase letters)  |
+|                  | Eg. `npx faharmony/cli --module sample`                     |
+|                  |                                                             |
+| `--tag | -t`     | Install specific tagged version of harmony.                 |
+|                  | Second param: stable, latest, snapshot, dev, rc, freeze     |
+|                  | Eg. `npx faharmony/cli --tag snapshot`                      |
+|                  |                                                             |
+| `--sync | -s`    | Synchronize current branch with FA_REACT_APP repo template. |
+|                  | Eg. `npx faharmony/cli --sync`                              |

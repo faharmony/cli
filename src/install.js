@@ -11,6 +11,7 @@
 /** @typedef {{name: string; types?: string[] }} Package */
 
 const {
+  args,
   useYarn,
   color,
   error,
@@ -26,8 +27,8 @@ const {
   getLibraryName,
   getTypeLibraries,
   checkPackageInfo,
-  getHelp
-} = require("./common");
+  getHelp, tags
+} = require("./utilities");
 
 // INSTALL
 
@@ -165,8 +166,51 @@ Try running command again without any package parameters.`
   return 0;
 };
 
+const installerParam = async () => {
+  const packageName = args[1] ? args[1].trim().toLowerCase() : "";
+  if (packageName === "") {
+    console.log(error(`Package name was not provided in command.`));
+    return;
+  }
+  if (packageName === core)
+    await installPackages()
+  else if ((mainPackages).map((pkg) => (pkg.name)).includes(packageName)) {
+    await installMainPackage(packageName);
+    return;
+  }
+  else {
+    console.log(error(`Package name is incorrect.`));
+    getHelp();
+    return;
+  }
+}
+
+const installTagParam = async () => {
+  const tag = args[1] ? args[1].trim().toLowerCase() : "";
+  if (tag === "") {
+    console.log(error(`Tag was not provided in command.`));
+    console.log("[ " + tags.join(", ") + " ]");
+    return;
+  }
+  switch (tag) {
+    case "latest": case "stable":
+      await installPackages("latest", [])
+      return;
+    case "rc": case "freeze":
+      await installPackages("RC", [])
+      return;
+    case "snapshot": case "dev":
+      await installPackages("SNAPSHOT", [])
+      return;
+    default: console.log(error(`Package name is incorrect.`));
+      getHelp();
+      return;
+  }
+}
+
 module.exports = {
   checkPackageInfo,
   installPackages,
-  installMainPackage,
+  installerParam,
+  installTagParam
 };

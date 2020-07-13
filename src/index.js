@@ -9,7 +9,7 @@
 
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
-const { args, color, bold, link, webLink, core } = require("./common");
+const { args, color, bold, link, webLink, core } = require("./utilities");
 const { installPackages, checkPackageInfo, } = require("./install");
 const { checkParam } = require('./params');
 // Greetings

@@ -15,7 +15,7 @@ const chalk = require("chalk");
 const fs = require("fs");
 const { exec } = require("child_process");
 const args = process.argv.slice(2);
-const color = chalk.magenta;
+const color = chalk.magenta; //32127A
 const bold = color.bold;
 const error = chalk.red;
 const link = chalk.blue;
@@ -49,6 +49,8 @@ const mainPackages = [
   { name: "charts", types: ["lodash"] },
   { name: "form" },
 ];
+
+const tags = ['stable', 'latest', 'snapshot', 'dev', 'rc', 'freeze'];
 
 // Paths
 const paths = {
@@ -143,5 +145,6 @@ module.exports = {
   getLibraryName,
   getTypeLibraries,
   checkPackageInfo,
-  getHelp
+  getHelp,
+  tags
 };

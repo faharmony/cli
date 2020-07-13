@@ -20,7 +20,7 @@ const {
     execute,
     checkPackageInfo,
     getHelp
-} = require("./common");
+} = require("./utilities");
 const { installPackage } = require("./install")
 
 /** Install/update module package and execute plop command to generate module template */
@@ -29,7 +29,7 @@ const generateModule = async () => {
     if (moduleId === "") {
         console.log(error(`ModuleID was not provided in command.`));
         getHelp();
-        return 1;
+        return;
     }
 
     const module = "module";
@@ -47,7 +47,7 @@ const generateModule = async () => {
         `New module "${moduleId}" is generated.`,
         true
     );
-    return 0;
+    return;
 };
 
 module.exports = { generateModule };
