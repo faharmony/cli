@@ -62,7 +62,7 @@ const help = async () => {
     const tab = "  ";
     for (const p in params) {
         const { param, description, second, example } = params[p];
-        console.log('\n' + whiteBold(param.join(" | ")));
+        console.log('\n' + whiteBold(param.join(", ")));
         description && console.log(tab + description);
         second && console.log(tab + "Second param: " + blue(second.join(", ")));
         const exampleLine = `npx faharmony/cli ${param[0]} ${example ? example : second ? second[0] : ''}`;
