@@ -52,6 +52,16 @@ const getInstallMessages = (name: string, version: string): IMessages => ({
   success: getInstallMessageSuccess(name, version),
 });
 
+const noCoreErrorLog = () => {
+  console.log(
+    error(
+      `A version of @faharmony/core must be installed before installing other packages. 
+Try running command again with tag params or no params (for latest).`
+    )
+  );
+  getHelp();
+};
+
 /** Function to install one package depending on tag/version */
 const install = async ({
   pkg: { name, types = [] },
@@ -68,10 +78,50 @@ const install = async ({
     await execute(command, messages?.success);
     // Install types
     const typeLibraries = getTypeLibraries(types);
-    const typesCommand = `${commands.install()} ${typeLibraries} --no-save `;
+    const typesCommand = `${commands.install()} ${typeLibraries}`;
     if (types.length > 0) await execute(typesCommand);
   } catch {
     console.log(error(messages?.error || "Error occurred."));
+  }
+};
+
+const installCommonPackages = async (version: string = "latest") => {
+  const corePkg = checkCore();
+  if (corePkg) {
+    // Update common deps to match tagged version
+    for (const pkg of commonPackages) {
+      const { name: cName, types: cTypes = [] } = pkg;
+      const pkgInfo = checkPackageInfo(cName);
+      // If core is installed
+      if (pkgInfo) {
+        // If common package is installed.
+        const coreVersion = corePkg.version;
+        if (coreVersion !== pkgInfo.version) {
+          // If installed cPackage doesn't match core version.
+          await install({
+            pkg,
+            version: coreVersion,
+            messages: {
+              init: getInstallMessageInit(cName, coreVersion),
+            },
+          });
+        }
+      } else {
+        // If cPackage is not found
+        await install({
+          pkg,
+          version,
+          messages: {
+            init: getInstallMessageInit(cName, version),
+          },
+        });
+      }
+      // Install cTypes
+      if (cTypes.length > 0)
+        await execute(`${commands.install()} ${getTypeLibraries(cTypes)}`);
+    }
+  } else {
+    noCoreErrorLog();
   }
 };
 
@@ -101,40 +151,8 @@ const installPackages = async ({
     });
 
   // Update common deps to match tagged version
-  for (const pkg of commonPackages) {
-    const { name: cName, types: cTypes = [] } = pkg;
-    const corePkg = checkCore();
-    const pkgInfo = checkPackageInfo(cName);
-    if (corePkg) {
-      // If core is installed
-      if (pkgInfo) {
-        // If common package is installed.
-        const coreVersion = corePkg.version;
-        if (version !== pkgInfo.version) {
-          // If installed cPackage doesn't match core version.
-          await install({
-            pkg,
-            version: coreVersion,
-            options: "--no-save",
-            messages: { init: getInstallMessageInit(cName, coreVersion) },
-          });
-        }
-      } else {
-        // If cPackage is not found
-        await install({
-          pkg,
-          version,
-          options: "--no-save",
-          messages: { init: getInstallMessageInit(cName, version) },
-        });
-      }
-    }
-    // Install cTypes
-    if (cTypes.length > 0)
-      await execute(
-        `${commands.install()} ${getTypeLibraries(cTypes)} --no-save`
-      );
-  }
+  await installCommonPackages(version);
+
   // Dedupe
   if (!useYarn) await execute(`npm dedupe`);
 };
@@ -160,15 +178,7 @@ const paramInstallPackage = async () => {
         version: corePkg.tag,
         pkg,
       });
-    } else {
-      console.log(
-        error(
-          `A version of @faharmony/core must be installed before installing other packages. 
-Try running command again with tag params or no params (for latest).`
-        )
-      );
-      getHelp();
-    }
+    } else noCoreErrorLog();
   } else {
     // No match for package name
     console.log(error(`Package name is incorrect.`));

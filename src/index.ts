@@ -9,7 +9,7 @@
 
 import { args, color, bold, link, webLink } from "./constants";
 import { checkParam } from "./params";
-import { checkCore } from "./utilities";
+
 // Greetings
 const message = "Welcome to FA harm☯️ny CLI ";
 const length = message.length + 4;
