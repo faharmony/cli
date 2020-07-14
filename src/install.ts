@@ -78,7 +78,7 @@ const install = async ({
     await execute(command, messages?.success);
     // Install types
     const typeLibraries = getTypeLibraries(types);
-    const typesCommand = `${commands.install()} ${typeLibraries}`;
+    const typesCommand = `${commands.install()} -D ${typeLibraries}`;
     if (types.length > 0) await execute(typesCommand);
   } catch {
     console.log(error(messages?.error || "Error occurred."));
@@ -88,37 +88,34 @@ const install = async ({
 const installCommonPackages = async (version: string = "latest") => {
   const corePkg = checkCore();
   if (corePkg) {
+    // If core is installed
+    const coreVersion = corePkg.version;
     // Update common deps to match tagged version
     for (const pkg of commonPackages) {
       const { name: cName, types: cTypes = [] } = pkg;
       const pkgInfo = checkPackageInfo(cName);
-      // If core is installed
-      if (pkgInfo) {
-        // If common package is installed.
-        const coreVersion = corePkg.version;
-        if (coreVersion !== pkgInfo.version) {
-          // If installed cPackage doesn't match core version.
-          await install({
-            pkg,
-            version: coreVersion,
-            messages: {
-              init: getInstallMessageInit(cName, coreVersion),
-            },
-          });
-        }
-      } else {
-        // If cPackage is not found
+
+      const toInstallVersion = pkgInfo
+        ? // If common package is installed.
+          coreVersion !== pkgInfo.version
+          ? // If installed cPackage doesn't match core version.
+            coreVersion
+          : // Package matched coreVersion
+            undefined
+        : // If cPackage is not found
+          version;
+
+      if (toInstallVersion) {
         await install({
           pkg,
-          version,
-          messages: {
-            init: getInstallMessageInit(cName, version),
-          },
+          version: toInstallVersion,
+          messages: getInstallMessages(cName, toInstallVersion),
         });
       }
+
       // Install cTypes
       if (cTypes.length > 0)
-        await execute(`${commands.install()} ${getTypeLibraries(cTypes)}`);
+        await execute(`${commands.install()} -D ${getTypeLibraries(cTypes)}`);
     }
   } else {
     noCoreErrorLog();
