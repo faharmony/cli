@@ -21,7 +21,7 @@
   },
   "scripts": {
     "clear": "rm -R ./bin || true",
-    "bundle": "yarn clear && microbundle-crl --compress -f cjs --no-sourcemap",
+    "bundle": "microbundle-crl --compress -f cjs --no-sourcemap",
     "build": "yarn bundle",
     "start": "yarn bundle watch",
     "test": "npx . -h"
