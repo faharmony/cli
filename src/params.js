@@ -7,11 +7,13 @@
  */
 // @ts-check
 
-const { args, chalk, bold, getHelp, mainPackages, tags, core } = require("./utilities");
+const { chalk, args, bold, core, mainPackages, tags } = require('./constants');
+const { getHelp } = require("./utilities");
 const { installerParam, installTagParam } = require("./install");
 const { harmonyVersion, } = require("./version");
 const { syncRepo } = require("./sync");
 const { generateModule } = require("./module");
+
 
 const params = {
     version: {
@@ -46,8 +48,7 @@ const params = {
         description:
             "Synchronize current branch with FA_REACT_APP repo template.",
         exec: syncRepo
-    },
-
+    }
 };
 
 /** Check version of installed harmony packages */

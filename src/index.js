@@ -9,8 +9,10 @@
 
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
-const { args, color, bold, link, webLink, core } = require("./utilities");
-const { installPackages, checkPackageInfo, } = require("./install");
+
+const { args, color, bold, link, webLink } = require("./constants");
+const { checkCore } = require("./utilities");
+const { installPackages, } = require("./install");
 const { checkParam } = require('./params');
 // Greetings
 const message = "Welcome to FA harm☯️ny CLI ";
@@ -34,7 +36,7 @@ const paramLine = `┃  ${params}${paramsSpace}  ┃`;
     // Match command parameter and perform
     await checkParam();
   } else {
-    const corePkg = checkPackageInfo(core);
+    const corePkg = checkCore();
     if (corePkg) {
       // Update preinstalled libraries
       await installPackages(corePkg.tag, []);

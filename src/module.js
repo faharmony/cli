@@ -10,18 +10,9 @@
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
 
-const {
-    color,
-    args,
-    error,
-    scope,
-    commonPackages,
-    paths,
-    execute,
-    checkPackageInfo,
-    getHelp
-} = require("./utilities");
-const { installPackage } = require("./install")
+const { args, color, error, scope, commonPackages, paths, } = require("./constants");
+const { execute, checkPackageInfo, getHelp } = require("./utilities");
+const { installPackage } = require("./install");
 
 /** Install/update module package and execute plop command to generate module template */
 const generateModule = async () => {

@@ -7,8 +7,8 @@
  */
 // @ts-check
 
-// VARIABLES
-const { execute, bold, color } = require("./utilities");
+const { bold, color } = require("./constants");
+const { execute } = require("./utilities");
 
 /** Synchronize current branch with FA_REACT_APP repo template. */
 const syncRepo = async () => {

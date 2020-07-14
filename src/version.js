@@ -7,45 +7,12 @@
  */
 // @ts-check
 
-// VARIABLES
-/** @typedef {{name: string; types?: string[] }} Package */
-
-const {
-  commonPackages,
-  mainPackages,
-  core,
-  color,
-  bold,
-  error,
-  asyncForEach,
-  checkPackageInfo,
-  getHelp
-} = require("./utilities");
-
-/** Get information about installed packages */
-// const harmonyInfo = async () => {
-//   console.log(color(`Finding harmony libraries in this project...`));
-//   let count = 0;
-//   await asyncForEach(
-//     mainPackages.concat(commonPackages),
-//     /** @param {Package} pkg */
-//     (pkg) => {
-//       const pkgInfo = checkPackageInfo(pkg.name);
-//       if (pkgInfo) {
-//         count++;
-//         console.log(
-//           color(`[${pkgInfo.tag}] ${bold(pkgInfo.name)}@${pkgInfo.version}`)
-//         );
-//       }
-//     }
-//   );
-//   if (count === 0) { console.log(error(`No harmony libraries found in this project.`)); getHelp(); }
-//   else console.log(color(`${count} harmony libraries found in this project.`));
-// };
+const { color, bold, error } = require("./constants");
+const { checkCore, getHelp } = require("./utilities");
 
 /** Check version of installed harmony packages */
 const harmonyVersion = async () => {
-  const corePkg = checkPackageInfo(core);
+  const corePkg = checkCore();
   if (corePkg) {
     console.log(
       color(
@@ -54,7 +21,6 @@ const harmonyVersion = async () => {
         }).`
       )
     );
-    // await harmonyInfo();
   }
 
   else {

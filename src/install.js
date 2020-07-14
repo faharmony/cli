@@ -12,7 +12,6 @@
 
 const {
   args,
-  useYarn,
   color,
   error,
   scope,
@@ -21,13 +20,19 @@ const {
   mainPackages,
   paths,
   commands,
+  useYarn,
+  outputs,
+  tags,
+} = require('./constants');
+
+const {
   asyncForEach,
   execute,
-  outputs,
   getLibraryName,
   getTypeLibraries,
+  checkCore,
   checkPackageInfo,
-  getHelp, tags
+  getHelp,
 } = require("./utilities");
 
 // INSTALL
@@ -36,26 +41,21 @@ const {
  * @param {string} tag @param {Package} pkg @param {string!} options */
 const installPackage = async (tag, pkg, options = "") => {
   const { name, types } = pkg;
-  console.log(
-    color(
-      `Installing library ${getLibraryName(
-        name
-      )}@${tag} using ${outputs.manager()}`
-    )
-  );
+  const message = `Installing package ${getLibraryName(name)}@${tag} using ${outputs.manager()}`;
+  console.log(color(message));
   /** @type string[] */
   const externalTypesMain = types || [];
   await execute(
     `${commands.install()} ${getLibraryName(pkg.name)}@${tag} ${options}`,
-    `${tag.toUpperCase()} version of ${getLibraryName(
-      name
-    )} and its dependencies installed successfully.`
+    `${getLibraryName(name)}@${tag.toUpperCase()} installed successfully.`
   );
   if (externalTypesMain.length > 0)
     await execute(
       `${commands.install()} --no-save ${getTypeLibraries(externalTypesMain)}`
     );
 };
+
+
 
 /** Function to install packages depending on tag
  * @param {string} tag @param {string[]} packages */
@@ -87,7 +87,7 @@ const installPackages = async (tag = "latest", packages = []) => {
     const libraryName = getLibraryName(pkg.name);
     const externalTypes = pkg.types || [];
 
-    const corePkg = checkPackageInfo(core);
+    const corePkg = checkCore();
     const pkgInfo = checkPackageInfo(pkg.name);
 
     if (pkgInfo && corePkg) {
@@ -116,7 +116,7 @@ const installPackages = async (tag = "latest", packages = []) => {
       const libraryName = getLibraryName(pkg.name);
       const externalTypes = pkg.types || [];
 
-      const corePkg = checkPackageInfo(core);
+      const corePkg = checkCore();
       const pkgInfo = checkPackageInfo(pkg.name);
 
       if (pkgInfo && corePkg) {
@@ -152,7 +152,7 @@ const installPackages = async (tag = "latest", packages = []) => {
 /** Install a main package according to command param
  * @param {string} pkg */
 const installMainPackage = async (pkg) => {
-  const corePkg = checkPackageInfo(core);
+  const corePkg = checkCore();
   if (corePkg) await installPackages(corePkg.tag, [pkg]);
   else {
     console.log(
