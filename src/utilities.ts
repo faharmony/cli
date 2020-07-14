@@ -6,7 +6,7 @@
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
 
-import { IPackage } from "./types";
+import { IPackage, IPackageInfo } from "./types";
 import { bold, error, scope, paths, exec, mainPackages } from "./constants";
 
 /** Makes the script silently ignore them error. */
@@ -41,7 +41,7 @@ const getTypeLibraries = (packages: string[]) =>
   packages.map((pkg) => `@types/${pkg}`).join(" ");
 
 /** Check core */
-const checkCore = () => {
+const checkCore = (): IPackageInfo | null | undefined => {
   try {
     const pkgJson = require(process.cwd() + "/package.json");
     const version = pkgJson.dependencies["@faharmony/core"].replace("^", "");
@@ -50,6 +50,7 @@ const checkCore = () => {
       : version.includes("SNAPSHOT")
       ? "SNAPSHOT"
       : "latest";
+    if (version === "0.0.1") return undefined;
     return { version, tag, name: pkgJson.name };
   } catch {
     return null;
@@ -57,7 +58,7 @@ const checkCore = () => {
 };
 
 /** Get info from package.json of package */
-const checkPackageInfo = (pkgName: string) => {
+const checkPackageInfo = (pkgName: string): IPackageInfo | null => {
   try {
     const pkgJson = require(paths.nodeModules +
       getLibraryName(pkgName) +

@@ -10,14 +10,14 @@
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
 
-import { args, color, error, scope, commonPackages, paths } from "./constants";
+import { args, color, error, scope, paths } from "./constants";
 import {
   execute,
   checkPackageInfo,
   getHelp,
   getPackageObject,
 } from "./utilities";
-import { installPackage } from "./install";
+import { install } from "./install";
 
 /** Install/update module package and execute plop command to generate module template */
 const generateModule = async () => {
@@ -32,11 +32,11 @@ const generateModule = async () => {
   const modulePkgInfo = checkPackageInfo(Module);
   const pkgObj = getPackageObject(Module);
   pkgObj &&
-    (await installPackage(
-      (modulePkgInfo && modulePkgInfo.tag) || "latest",
-      pkgObj,
-      "--no-save"
-    ));
+    (await install({
+      pkg: pkgObj,
+      version: (modulePkgInfo && modulePkgInfo.tag) || "latest",
+      options: "--no-save",
+    }));
 
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${Module}/plop.js`;

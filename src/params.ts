@@ -15,8 +15,12 @@ import {
   tags,
   color,
 } from "./constants";
-import { getHelp } from "./utilities";
-import { paramInstallPackage, paramInstallTag } from "./install";
+import { getHelp, checkCore } from "./utilities";
+import {
+  paramInstallPackage,
+  paramInstallTag,
+  installPackages,
+} from "./install";
 import { harmonyVersion } from "./version";
 import { syncRepo } from "./sync";
 import { generateModule } from "./module";
@@ -82,19 +86,32 @@ async function help() {
 }
 
 const checkParam = async () => {
-  const param = args[0].trim().toLowerCase();
-  let info = { name: "", exec: () => Promise.resolve() };
-  Object.entries(params).forEach(([name, obj]) => {
-    if (typeof obj !== "string" && obj.param.includes(param))
-      info = { name, exec: obj.exec };
-  });
-  // If param found, execute function
-  if (info.name !== "") await info.exec();
-  // Else (no match)
-  else {
-    console.log(chalk.red.bold("Error: The command is incorrect."));
-    getHelp();
+  if (args.length > 0) {
+    const param = args[0].trim().toLowerCase();
+    let info = { name: "", exec: () => Promise.resolve() };
+    Object.entries(params).forEach(([name, obj]) => {
+      if (typeof obj !== "string" && obj.param.includes(param))
+        info = { name, exec: obj.exec };
+    });
+    // If param found, execute function
+    if (info.name !== "") await info.exec();
+    // Else (no match)
+    else {
+      console.log(chalk.red.bold("Error: The command is incorrect."));
+      getHelp();
+    }
+  } else {
+    const corePkg = checkCore();
+    if (corePkg) {
+      // Update preinstalled libraries
+      await installPackages({ version: corePkg.tag });
+    } else {
+      // If core package is not installed,
+      // then install version with @latest tag.
+      await installPackages({ version: "latest" });
+    }
   }
+  return;
 };
 
 export { params, checkParam };

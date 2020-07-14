@@ -8,9 +8,8 @@
 // @ts-check
 
 import { args, color, bold, link, webLink } from "./constants";
-import { checkCore } from "./utilities";
-import { installPackages } from "./install";
 import { checkParam } from "./params";
+import { checkCore } from "./utilities";
 // Greetings
 const message = "Welcome to FA harm☯️ny CLI ";
 const length = message.length + 4;
@@ -20,7 +19,7 @@ const params = args.length ? `Param: ${args.join(" ")}` : "No param";
 const paramsSpace = Array(message.length - params.length).join(" ");
 const topLine = `┏${line}┓`;
 const messageLine = `┃  ${bold(message)}  ┃`;
-const spaceLine = `┃${space}┃`;
+// const spaceLine = `┃${space}┃`;
 const bottomLine = `┗${line}┛`;
 const paramLine = `┃  ${params}${paramsSpace}  ┃`;
 
@@ -29,20 +28,8 @@ const paramLine = `┃  ${params}${paramsSpace}  ┃`;
   // Header
   console.log(`\n${topLine}\n${messageLine}\n${paramLine}\n${bottomLine}\n`);
 
-  if (args.length > 0) {
-    // Match command parameter and perform
-    await checkParam();
-  } else {
-    const corePkg = checkCore();
-    if (corePkg) {
-      // Update preinstalled libraries
-      await installPackages(corePkg.tag, []);
-    } else {
-      // If core package is not installed,
-      // then install version with @latest tag.
-      await installPackages("latest");
-    }
-  }
+  // PARAM CHECK
+  if (true) await checkParam();
 
   // FOOTER
   console.log(

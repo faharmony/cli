@@ -26,7 +26,6 @@ import {
 } from "./constants";
 
 import {
-  asyncForEach,
   execute,
   getLibraryName,
   getTypeLibraries,
@@ -36,9 +35,22 @@ import {
   getPackageObject,
 } from "./utilities";
 
-import { IPackage, IInstallOptions, IMessages } from "./types";
+import { IInstallOptions, IMessages, IInstallPackagesOptions } from "./types";
 
 // INSTALL
+
+const getInstallMessageInit = (name: string, version: string) =>
+  `Installing package ${getLibraryName(
+    name
+  )}@${version} using ${outputs.manager()}`;
+
+const getInstallMessageSuccess = (name: string, version: string) =>
+  `${getLibraryName(name)}@${version} installed successfully.`;
+
+const getInstallMessages = (name: string, version: string): IMessages => ({
+  init: getInstallMessageInit(name, version),
+  success: getInstallMessageSuccess(name, version),
+});
 
 /** Function to install one package depending on tag/version */
 const install = async ({
@@ -56,149 +68,75 @@ const install = async ({
     await execute(command, messages?.success);
     // Install types
     const typeLibraries = getTypeLibraries(types);
-    const typesCommand = `${commands.install()} --no-save ${typeLibraries}`;
+    const typesCommand = `${commands.install()} ${typeLibraries} --no-save `;
     if (types.length > 0) await execute(typesCommand);
   } catch {
     console.log(error(messages?.error || "Error occurred."));
   }
 };
 
-/** Function to install one package depending on tag/version */
-const installPackage = async (tag: string, pkg: IPackage, options = "") => {
-  const { name, types } = pkg;
-  // Install message
-  const message = `Installing package ${getLibraryName(
-    name
-  )}@${tag} using ${outputs.manager()}`;
-  console.log(color(message));
-  // Install exec
-  await execute(
-    `${commands.install()} ${getLibraryName(pkg.name)}@${tag} ${options}`,
-    `${getLibraryName(name)}@${tag.toUpperCase()} installed successfully.`
-  );
-  // Install types
-  /** @type string[] */
-  const externalTypes = types || [];
-  if (externalTypes.length > 0)
-    await execute(
-      `${commands.install()} --no-save ${getTypeLibraries(externalTypes)}`
-    );
-};
-
-/** Function to install packages depending on tag */
-const installPackages = async (
-  tag: string = "latest",
-  packageNames: string[] = []
-) => {
-  if (packageNames.length === 0) {
-    mainPackages.forEach((pkg) => {
-      if (checkPackageInfo(pkg.name)) packageNames.push(pkg.name);
-    });
-    if (!packageNames.includes(core)) packageNames.push(core);
-  }
-
-  /** @type Package[] */
-  const toInstallPackages = mainPackages.filter((main) =>
+/** Function to install multiple packages */
+const installPackages = async ({
+  packageNames = [core],
+  version = "latest",
+}: IInstallPackagesOptions) => {
+  // Prepare a list of installed packages
+  mainPackages.forEach(({ name }) => {
+    if (checkPackageInfo(name) && name !== core) packageNames.push(name);
+  });
+  // Get package objects for installed packages
+  const packagesToInstall = mainPackages.filter((main) =>
     packageNames.includes(main.name)
   );
 
+  // Remove harmony's node_modules
   await execute(`rm -rf ${paths.nodeModules}/${scope}`);
 
-  for (const pkg of toInstallPackages) await installPackage(tag, pkg);
+  // Install main packages
+  for (const pkg of packagesToInstall)
+    await install({
+      version,
+      pkg,
+      messages: getInstallMessages(pkg.name, version),
+    });
 
   // Update common deps to match tagged version
   for (const pkg of commonPackages) {
-    const log = (name: string, version: string) =>
-      console.log(
-        color(
-          `Installing library ${name}@${version} using ${outputs.manager()}`
-        )
-      );
-    const libraryName = getLibraryName(pkg.name);
-    const externalTypes = pkg.types || [];
-
+    const { name: cName, types: cTypes = [] } = pkg;
     const corePkg = checkCore();
-    const pkgInfo = checkPackageInfo(pkg.name);
-
-    if (pkgInfo && corePkg) {
-      const version = corePkg.version;
-      if (pkgInfo.version !== version) {
-        log(libraryName, version);
-        await execute(
-          `${commands.install()} ${libraryName}@${version} --no-save`
-        );
+    const pkgInfo = checkPackageInfo(cName);
+    if (corePkg) {
+      // If core is installed
+      if (pkgInfo) {
+        // If common package is installed.
+        const coreVersion = corePkg.version;
+        if (version !== pkgInfo.version) {
+          // If installed cPackage doesn't match core version.
+          await install({
+            pkg,
+            version: coreVersion,
+            options: "--no-save",
+            messages: { init: getInstallMessageInit(cName, coreVersion) },
+          });
+        }
+      } else {
+        // If cPackage is not found
+        await install({
+          pkg,
+          version,
+          options: "--no-save",
+          messages: { init: getInstallMessageInit(cName, version) },
+        });
       }
-    } else {
-      log(libraryName, tag);
-      await execute(`${commands.install()} ${libraryName}@${tag} --no-save`);
     }
-
-    if (externalTypes.length > 0)
+    // Install cTypes
+    if (cTypes.length > 0)
       await execute(
-        `${commands.install()} -D ${getTypeLibraries(externalTypes)}`
+        `${commands.install()} ${getTypeLibraries(cTypes)} --no-save`
       );
   }
-
-  await asyncForEach(commonPackages, async (pkg: IPackage) => {
-    const libraryName = getLibraryName(pkg.name);
-    const externalTypes = pkg.types || [];
-
-    const corePkg = checkCore();
-    const pkgInfo = checkPackageInfo(pkg.name);
-
-    if (pkgInfo && corePkg) {
-      const version = corePkg.version;
-      if (pkgInfo.version !== version) {
-        console.log(
-          color(
-            `Installing library ${libraryName}@${version} using ${outputs.manager()}`
-          )
-        );
-        // await execute(`${commands.remove()} ${libraryName}`);
-        await execute(`${commands.install()} ${libraryName}@${version}`);
-      }
-    } else {
-      console.log(
-        color(
-          `Installing library ${libraryName}@${tag} using ${outputs.manager()}`
-        )
-      );
-      await execute(`${commands.install()} ${libraryName}@${tag}`);
-    }
-
-    if (externalTypes.length > 0)
-      await execute(
-        `${commands.install()} -D ${getTypeLibraries(externalTypes)}`
-      );
-  });
-
+  // Dedupe
   if (!useYarn) await execute(`npm dedupe`);
-};
-
-/** Install a main package according to command param */
-const installMainPackage = async (packageName: string) => {
-  const corePkg = checkCore();
-  const pkg = getPackageObject(packageName);
-  if (corePkg && pkg) {
-    const messages: IMessages = {
-      init: `Installing package ${getLibraryName(packageName)}@${
-        corePkg.tag
-      } using ${outputs.manager()}`,
-      success: `${getLibraryName(packageName)}@${
-        corePkg.tag
-      } installed successfully.`,
-    };
-    await install({ messages, version: corePkg.tag, pkg });
-  } else {
-    console.log(
-      error(
-        `A version of @faharmony/core must be installed before installing other packages. 
-Try running command again with tag params or no params (for latest).`
-      )
-    );
-    getHelp();
-  }
-  return;
 };
 
 // PARAM based installers
@@ -206,10 +144,33 @@ Try running command again with tag params or no params (for latest).`
 const paramInstallPackage = async () => {
   const packageName = args[1] ? args[1].trim().toLowerCase() : "";
   if (packageName === "")
+    // No package name provided
     console.log(error(`Package name was not provided in command.`));
-  else if (packageName === core) await installPackages();
-  else if (getPackageObject(packageName)) await installMainPackage(packageName);
-  else {
+  else if (packageName === core)
+    // Package name is core
+    await installPackages({ version: checkCore()?.version || "latest" });
+  else if (getPackageObject(packageName)) {
+    // Any other main package name than core
+    const corePkg = checkCore();
+    const pkg = getPackageObject(packageName);
+    if (corePkg && pkg) {
+      // Install main package
+      await install({
+        messages: getInstallMessages(packageName, corePkg.tag),
+        version: corePkg.tag,
+        pkg,
+      });
+    } else {
+      console.log(
+        error(
+          `A version of @faharmony/core must be installed before installing other packages. 
+Try running command again with tag params or no params (for latest).`
+        )
+      );
+      getHelp();
+    }
+  } else {
+    // No match for package name
     console.log(error(`Package name is incorrect.`));
     getHelp();
   }
@@ -225,15 +186,15 @@ const paramInstallTag = async () => {
   switch (tag) {
     case "latest":
     case "stable":
-      await installPackages("latest", []);
+      await installPackages({ version: "latest" });
       return;
     case "rc":
     case "freeze":
-      await installPackages("RC", []);
+      await installPackages({ version: "RC" });
       return;
     case "snapshot":
     case "dev":
-      await installPackages("SNAPSHOT", []);
+      await installPackages({ version: "SNAPSHOT" });
       return;
     default:
       console.log(error(`Package name is incorrect.`));
@@ -242,9 +203,4 @@ const paramInstallTag = async () => {
   }
 };
 
-export {
-  installPackages,
-  installPackage,
-  paramInstallPackage,
-  paramInstallTag,
-};
+export { paramInstallPackage, paramInstallTag, installPackages, install };

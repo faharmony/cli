@@ -27,3 +27,14 @@ export interface IInstallOptions {
   options?: string;
   messages?: IMessages;
 }
+
+export interface IInstallPackagesOptions {
+  packageNames?: string[];
+  version?: string;
+}
+
+export interface IPackageInfo {
+  name: string;
+  version: string;
+  tag: string;
+}
