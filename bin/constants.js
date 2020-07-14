@@ -20,6 +20,7 @@ const bold = color.bold;
 const error = chalk.red;
 const link = chalk.blue;
 const webLink = "https://github.com/faharmony/cli";
+const pkgJsonCLI = require('../package.json');
 
 // Harmony libraries
 const scope = "@faharmony";
@@ -89,4 +90,5 @@ module.exports = {
     outputs,
     tags,
     exec,
+    pkgJsonCLI
 };
