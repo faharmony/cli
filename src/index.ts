@@ -7,13 +7,10 @@
  */
 // @ts-check
 
-// VARIABLES
-/** @typedef {{name: string; types?: string[] }} Package */
-
-const { args, color, bold, link, webLink } = require("./constants");
-const { checkCore } = require("./utilities");
-const { installPackages, } = require("./install");
-const { checkParam } = require('./params');
+import { args, color, bold, link, webLink } from "./constants";
+import { checkCore } from "./utilities";
+import { installPackages } from "./install";
+import { checkParam } from "./params";
 // Greetings
 const message = "Welcome to FA harm☯️ny CLI ";
 const length = message.length + 4;
@@ -48,6 +45,10 @@ const paramLine = `┃  ${params}${paramsSpace}  ┃`;
   }
 
   // FOOTER
-  console.log(`${color("\nMade with 💜 at FA Solutions Oy.")}\n${link(webLink)}\n${line}━━`);
+  console.log(
+    `${color("\nMade with 💜 at FA Solutions Oy.")}\n${link(
+      webLink
+    )}\n${line}━━`
+  );
 })();
 // END

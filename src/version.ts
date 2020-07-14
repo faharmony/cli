@@ -5,10 +5,9 @@
  * Script to install and update Harmony framework.
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
-// @ts-check
 
-const { color, bold, error, pkgJsonCLI } = require("./constants");
-const { checkCore, getHelp } = require("./utilities");
+import { color, bold, error, pkgJsonCLI } from "./constants";
+import { checkCore, getHelp } from "./utilities";
 
 /** Check version of installed harmony packages */
 const harmonyVersion = async () => {
@@ -17,14 +16,14 @@ const harmonyVersion = async () => {
     console.log(
       color(
         `Installed version of harmony is \n${bold(corePkg.version)} (tag:${
-        corePkg.tag
+          corePkg.tag
         }).`
       )
     );
-  }
-
-  else {
-    console.log(error(`No installed version of harmony \nfound in this application.`));
+  } else {
+    console.log(
+      error(`No installed version of harmony \nfound in this application.`)
+    );
     getHelp();
   }
 
@@ -37,7 +36,7 @@ The CLI is made to manage harmony's
 packages and versioning in the apps.
 Contributors:`
   );
-  pkgJsonCLI.contributors.forEach((n) => console.log(`  %s`, n));
+  pkgJsonCLI.contributors.forEach((n: string) => console.log(`  %s`, n));
 };
 
-module.exports = { harmonyVersion };
+export { harmonyVersion };

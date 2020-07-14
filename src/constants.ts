@@ -7,13 +7,13 @@
  */
 // @ts-check
 
-// CONSTANTS
-/** @typedef {{name: string; types?: string[] }} Package */
-
+// @ts-ignore
 import chalk from "chalk";
-// const chalk = require("chalk");
-const fs = require("fs");
-const { exec } = require("child_process");
+import fs from "fs";
+import { exec } from "child_process";
+
+import { IPackage } from "./types";
+
 const args = process.argv.slice(2);
 const color = chalk.magenta; //32127A
 const bold = color.bold;
@@ -26,8 +26,7 @@ const pkgJsonCLI = require("../package.json");
 const scope = "@faharmony";
 const core = "core";
 
-/** @type Package[] */
-const commonPackages = [
+const commonPackages: IPackage[] = [
   { name: "components" },
   { name: "globalbar" },
   { name: "helpers", types: ["uuid"] },
@@ -43,8 +42,8 @@ const commonPackages = [
   { name: "theme" },
   { name: "views" },
 ];
-/** @type Package[] */
-const mainPackages = [
+
+const mainPackages: IPackage[] = [
   { name: core, types: ["node", "react"] },
   { name: "table", types: ["react-table"] },
   { name: "charts", types: ["lodash"] },
@@ -71,7 +70,7 @@ const outputs = {
   manager: () => (useYarn ? "Yarn" : "NPM"),
 };
 
-module.exports = {
+export {
   chalk,
   fs,
   args,
