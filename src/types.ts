@@ -7,8 +7,8 @@ export interface IParam {
   param: string[];
   description: string;
   exec: () => Promise<void>;
-  second?: string[];
-  example?: string;
+  values?: string[];
+  usage?: string;
 }
 
 export interface IParams {

@@ -28,20 +28,20 @@ The command can take one optional param which can be used to configure usage of 
 
 | param           | description                                                 |
 | --------------- | ----------------------------------------------------------- |
-| `--version, -v` | Check installed version of harmony.                         |
-|                 | Eg. `npx faharmony/cli --version`                           |
+| `--tag, -t`     | Install specific tagged version of harmony.                 |
+|                 | param value: stable, latest, snapshot, dev, rc, freeze      |
+|                 | `npx faharmony/cli --tag snapshot`                          |
 |                 |                                                             |
 | `--install, -i` | Install harmony's packages.                                 |
-|                 | Second param: table, charts, form                           |
-|                 | Eg. `npx faharmony/cli --install table`                     |
+|                 | param value: table, charts, form                            |
+|                 | `npx faharmony/cli --install table`                         |
 |                 |                                                             |
 | `--module, -m`  | Generate harmony module using plop.                         |
-|                 | Second param: ModuleID (string with all-lowercase letters)  |
-|                 | Eg. `npx faharmony/cli --module sample`                     |
+|                 | param value: a ModuleID (string with all-lowercase letters) |
+|                 | `npx faharmony/cli --module sample`                         |
 |                 |                                                             |
-| `--tag, -t`     | Install specific tagged version of harmony.                 |
-|                 | Second param: stable, latest, snapshot, dev, rc, freeze     |
-|                 | Eg. `npx faharmony/cli --tag snapshot`                      |
+| `--sync, -s`    | Synchronize current branch with template repo.              |
 |                 |                                                             |
-| `--sync, -s`    | Synchronize current branch with FA_REACT_APP repo template. |
-|                 | Eg. `npx faharmony/cli --sync`                              |
+| `--version, -v` | Check installed version of harmony.                         |
+|                 |                                                             |
+| `--help, -h`    | Displays this message.                                      |
