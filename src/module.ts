@@ -10,7 +10,7 @@
 // VARIABLES
 /** @typedef {{name: string; types?: string[] }} Package */
 
-import { args, color, error, scope, paths } from "./constants";
+import { args, color, error, scope, paths, success } from "./constants";
 import {
   execute,
   checkPackageInfo,
@@ -40,11 +40,8 @@ const generateModule = async () => {
 
   console.log(color(`Initiating module generator script...`));
   const pathPlop = `${paths.nodeModules}${scope}/${Module}/plop.js`;
-  await execute(
-    `npx plop --plopfile ${pathPlop} ${moduleId}`,
-    `New module "${moduleId}" is generated.`,
-    true
-  );
+  if (await execute(`npx plop --plopfile ${pathPlop} ${moduleId}`, true))
+    console.log(success(`New module "${moduleId}" is generated.`));
   return;
 };
 

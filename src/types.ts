@@ -25,7 +25,6 @@ export interface IInstallOptions {
   pkg: IPackage;
   version: string;
   options?: string;
-  messages?: IMessages;
 }
 
 export interface IInstallPackagesOptions {

@@ -7,7 +7,7 @@
  */
 
 import { IPackageInfo } from "./types";
-import { success, error, scope, core, exec, mainPackages } from "./constants";
+import { error, scope, core, exec, mainPackages } from "./constants";
 
 /** Makes the script silently ignore them error. */
 process.on("unhandledRejection", console.log); // throw err;
@@ -20,18 +20,16 @@ const asyncForEach = async (a: any[], c: Function) => {
 /** Execute shell command with success message */
 const execute = (
   command: string,
-  message: string = "",
   showError: boolean = true
-): Promise<string> =>
+): Promise<boolean> =>
   new Promise((resolve) => {
-    exec(command, (err, stdout, stderr) => {
+    exec(command, (err, _, stderr) => {
       if (err) {
         showError && console.error(error(`error: ${err.message}`));
-        resolve(err.message);
+        resolve(false);
         return;
       }
-      if (message !== "") console.log(success(message + "\n"));
-      resolve(stdout ? stdout : stderr);
+      resolve(stderr ? false : true);
     });
   });
 

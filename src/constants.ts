@@ -5,10 +5,9 @@
  * Script to install and update Harmony framework.
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
-// @ts-check
 
-// @ts-ignore
-import chalk from "chalk";
+const chalk = require("chalk");
+const ora = require("ora");
 import fs from "fs";
 import { exec } from "child_process";
 
@@ -73,6 +72,7 @@ const outputs = {
 
 export {
   chalk,
+  ora,
   fs,
   args,
   color,

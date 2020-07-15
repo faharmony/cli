@@ -19,7 +19,7 @@ const syncRepo = async () => {
   await execute(`git fetch upstream`);
   const res = await execute(`git merge upstream/master`);
 
-  if (res === "Already up to date.") console.log(bold(`The app is in sync.`));
+  if (res) console.log(bold(`The app is in sync.`));
   else
     console.log(
       color(`Syncing may require resolving some merge conflicts.
