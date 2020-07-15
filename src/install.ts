@@ -21,9 +21,8 @@ import {
   paths,
   commands,
   useYarn,
-  outputs,
   tags,
-  success,
+  bold,
   ora,
 } from "./constants";
 
@@ -37,7 +36,12 @@ import {
   getPackageObject,
 } from "./utilities";
 
-import { IInstallOptions, IMessages, IInstallPackagesOptions } from "./types";
+import {
+  IInstallOptions,
+  IMessages,
+  IInstallPackagesOptions,
+  IPackage,
+} from "./types";
 
 // INSTALL
 const noCoreErrorLog = () => {
@@ -50,6 +54,12 @@ Try running command again with tag params or no params (for latest).`
   getHelp();
 };
 
+// Log installing message
+const logInstallingPackages = (packages: IPackage[]) => {
+  const packagesList = packages.map((p) => p.name).join(", ");
+  console.log(color(`Installing packages:`, bold(packagesList)));
+};
+
 /** Function to install one package depending on tag/version */
 const install = async ({
   pkg: { name, types = [] },
@@ -57,10 +67,11 @@ const install = async ({
   options = "",
 }: IInstallOptions) => {
   const messages = {
-    init: `[${outputs.manager()}] Install ${getLibraryName(name)}@${version}`,
-    loading: `Installing`,
-    success: `Done`,
-    error: `Error`,
+    // init: `[${outputs.manager()}] Install ${getLibraryName(name)}@${version}`,
+    init: `[${version}] ${getLibraryName(name)}`,
+    loading: `Installing `,
+    success: `Installed `,
+    error: `Error occurred `,
   };
   try {
     const oraOptions = {
@@ -68,19 +79,20 @@ const install = async ({
       prefixText: messages.init,
     };
     // Init
-    // console.log(color(messages?.init));
     const installer = ora(oraOptions).start();
-    // Install exec
+    // Install package
     const library = getLibraryName(name) + "@" + version;
     const command = `${commands.install()} ${library} ${options}`;
     const res = await execute(command);
-    // console.log(success(messages?.success));
+    // Install types
+    if (types.length > 0) {
+      const typeLibraries = getTypeLibraries(types);
+      const typesCommand = `${commands.install()} -D ${typeLibraries}`;
+      await execute(typesCommand);
+    }
+    // Result
     if (res) installer.succeed(messages.success);
     else installer.fail(messages.error);
-    // Install types
-    const typeLibraries = getTypeLibraries(types);
-    const typesCommand = `${commands.install()} -D ${typeLibraries}`;
-    if (types.length > 0) await execute(typesCommand);
   } catch {
     console.log(error(messages?.error || "Error occurred."));
   }
@@ -91,12 +103,11 @@ const installCommonPackages = async (version: string = "latest") => {
   if (corePkg) {
     // If core is installed
     const coreVersion = corePkg.version;
-    console.log("Version:", coreVersion);
+    console.log("\nCurrent version:", coreVersion);
     // Update common deps to match tagged version
     for (const pkg of commonPackages) {
       const { name: cName, types: cTypes = [] } = pkg;
       const pkgInfo = checkPackageInfo(cName);
-
       const toInstallVersion = pkgInfo
         ? // If common package is installed.
           coreVersion !== pkgInfo.version
@@ -106,18 +117,9 @@ const installCommonPackages = async (version: string = "latest") => {
             undefined
         : // If cPackage is not found
           version;
-
-      if (toInstallVersion) {
-        await install({ pkg, version: toInstallVersion });
-
-        // Install cTypes
-        if (cTypes.length > 0)
-          await execute(`${commands.install()} -D ${getTypeLibraries(cTypes)}`);
-      }
+      if (toInstallVersion) await install({ pkg, version: toInstallVersion });
     }
-  } else {
-    noCoreErrorLog();
-  }
+  } else noCoreErrorLog();
 };
 
 /** Function to install multiple packages */
@@ -138,6 +140,7 @@ const installPackages = async ({
   await execute(`rm -rf ${paths.nodeModules}/${scope}`);
 
   // Install main packages
+  logInstallingPackages(packagesToInstall);
   for (const pkg of packagesToInstall) await install({ version, pkg });
 
   // Update common deps to match tagged version

@@ -38,16 +38,16 @@ const commonPackages: IPackage[] = [
   { name: "navigation" },
   { name: "router", types: ["react-router-dom"] },
   { name: "service" },
-  { name: "state", types: ["react-redux", "webpack-env"] },
+  { name: "state", types: ["react-redux"] },
   { name: "theme" },
   { name: "views" },
 ];
 
 const mainPackages: IPackage[] = [
   { name: core, types: ["node", "react"] },
-  { name: "table", types: ["react-table"] },
   { name: "charts", types: ["lodash"] },
-  { name: "form" },
+  { name: "form", types: ["react-select"] },
+  { name: "table", types: ["react-table"] },
 ];
 
 const tags = ["stable", "latest", "snapshot", "dev", "rc", "freeze"];
