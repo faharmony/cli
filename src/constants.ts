@@ -18,6 +18,7 @@ const args = process.argv.slice(2);
 const color = chalk.magenta; //32127A
 const bold = color.bold;
 const error = chalk.red;
+const success = chalk.green;
 const link = chalk.blue;
 const webLink = "https://github.com/faharmony/cli";
 const pkgJsonCLI = require("../package.json");
@@ -76,6 +77,7 @@ export {
   args,
   color,
   bold,
+  success,
   error,
   link,
   webLink,

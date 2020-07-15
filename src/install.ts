@@ -39,17 +39,10 @@ import { IInstallOptions, IMessages, IInstallPackagesOptions } from "./types";
 
 // INSTALL
 
-const getInstallMessageInit = (name: string, version: string) =>
-  `Installing package ${getLibraryName(
-    name
-  )}@${version} using ${outputs.manager()}`;
-
-const getInstallMessageSuccess = (name: string, version: string) =>
-  `${getLibraryName(name)}@${version} installed successfully.`;
-
 const getInstallMessages = (name: string, version: string): IMessages => ({
-  init: getInstallMessageInit(name, version),
-  success: getInstallMessageSuccess(name, version),
+  init: `[${outputs.manager()}] Install: ${getLibraryName(name)}@${version}`,
+  success: `✓ Successfully installed`,
+  error: `× Error occurred during installation`,
 });
 
 const noCoreErrorLog = () => {
@@ -90,6 +83,7 @@ const installCommonPackages = async (version: string = "latest") => {
   if (corePkg) {
     // If core is installed
     const coreVersion = corePkg.version;
+    console.log("Version:", coreVersion, "\n");
     // Update common deps to match tagged version
     for (const pkg of commonPackages) {
       const { name: cName, types: cTypes = [] } = pkg;
