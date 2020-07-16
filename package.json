@@ -20,6 +20,9 @@
     "microbundle-crl": "^0.13.11",
     "typescript": "^3.9.6"
   },
+  "peerDependencies": {
+    "child_process": "*"
+  },
   "scripts": {
     "clear": "rm -R ./bin || true",
     "bundle": "microbundle-crl --compress -f cjs --no-sourcemap",
