@@ -33,8 +33,8 @@ The command can take one optional param which can be used to configure usage of 
 |                 | `npx faharmony/cli --tag snapshot`                          |
 |                 |                                                             |
 | `--install, -i` | Install harmony's packages.                                 |
-|                 | param value: table, charts, form                            |
-|                 | `npx faharmony/cli --install table`                         |
+|                 | param value: table, charts                                  |
+|                 | `npx faharmony/cli --install charts`                        |
 |                 |                                                             |
 | `--module, -m`  | Generate harmony module using plop.                         |
 |                 | param value: a ModuleID (string with all-lowercase letters) |

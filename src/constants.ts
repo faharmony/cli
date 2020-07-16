@@ -28,6 +28,7 @@ const core = "core";
 
 const commonPackages: IPackage[] = [
   { name: "components" },
+  { name: "form", types: ["react-select"] },
   { name: "helpers", types: ["uuid"] },
   { name: "icons" },
   { name: "locale" },
@@ -42,7 +43,6 @@ const commonPackages: IPackage[] = [
 const mainPackages: IPackage[] = [
   { name: core, types: ["node", "react"] },
   { name: "charts", types: ["lodash"] },
-  { name: "form", types: ["react-select"] },
   { name: "table", types: ["react-table"] },
 ];
 

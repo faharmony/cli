@@ -38,7 +38,7 @@ const params: IParams = {
     param: ["--install", "-i"],
     description: "Install harmony's packages.",
     values: mainPackages.map((pkg) => pkg.name).filter((pkg) => pkg !== core),
-    usage: "table",
+    usage: "charts",
     exec: paramInstallPackage,
   },
   module: {
