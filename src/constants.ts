@@ -28,7 +28,6 @@ const core = "core";
 
 const commonPackages: IPackage[] = [
   { name: "components" },
-  { name: "globalbar" },
   { name: "helpers", types: ["uuid"] },
   { name: "icons" },
   { name: "locale" },
