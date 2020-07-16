@@ -31,7 +31,6 @@ const commonPackages: IPackage[] = [
   { name: "globalbar" },
   { name: "helpers", types: ["uuid"] },
   { name: "icons" },
-  { name: "layouts" },
   { name: "locale" },
   { name: "module" },
   { name: "router", types: ["react-router-dom"] },
