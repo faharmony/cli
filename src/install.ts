@@ -36,12 +36,7 @@ import {
   getPackageObject,
 } from "./utilities";
 
-import {
-  IInstallOptions,
-  IMessages,
-  IInstallPackagesOptions,
-  IPackage,
-} from "./types";
+import { IInstallOptions, IInstallPackagesOptions, IPackage } from "./types";
 
 // INSTALL
 const noCoreErrorLog = () => {

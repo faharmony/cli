@@ -12,11 +12,6 @@ import { error, scope, core, exec, mainPackages } from "./constants";
 /** Makes the script silently ignore them error. */
 process.on("unhandledRejection", console.log); // throw err;
 
-/** Custom async forEach method */
-const asyncForEach = async (a: any[], c: Function) => {
-  for (let i = 0; i < a.length; i++) await c(a[i], i, a);
-};
-
 /** Execute shell command with success message */
 const execute = (
   command: string,
@@ -68,7 +63,6 @@ const getPackageObject = (packageName: string) =>
   mainPackages.find((p) => p.name === packageName);
 
 export {
-  asyncForEach,
   execute,
   getLibraryName,
   getTypeLibraries,

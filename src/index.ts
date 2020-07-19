@@ -5,7 +5,6 @@
  * Script to install and update Harmony framework.
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
-// @ts-check
 
 import { args, color, bold, link, webLink } from "./constants";
 import { checkParam } from "./params";
