@@ -28,7 +28,8 @@
     "bundle": "microbundle-crl --compress -f cjs --no-sourcemap",
     "build": "yarn bundle",
     "start": "yarn bundle watch",
-    "test": "npx . -h"
+    "test": "npx . -h",
+    "deploy": "yarn build && git add . && git commit -m \"Deploy\" && git push"
   },
   "bin": "./bin/index.js",
   "main": "bin/index.js",

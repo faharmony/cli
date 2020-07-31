@@ -36,6 +36,7 @@ const commonPackages: IPackage[] = [
   { name: "router", types: ["react-router-dom"] },
   { name: "service" },
   { name: "state", types: ["react-redux"] },
+  { name: "table", types: ["react-table"] },
   { name: "theme" },
   { name: "views" },
 ];
@@ -43,7 +44,6 @@ const commonPackages: IPackage[] = [
 const mainPackages: IPackage[] = [
   { name: core, types: ["node", "react"] },
   { name: "charts", types: ["lodash"] },
-  { name: "table", types: ["react-table"] },
 ];
 
 const tags = ["stable", "latest", "snapshot", "dev", "rc", "freeze"];

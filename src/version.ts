@@ -6,7 +6,7 @@
  * @author Siddhant Gupta <siddhant@fasolutions.com> https://github.com/guptasiddhant
  */
 
-import { color, bold, error, pkgJsonCLI } from "./constants";
+import { color, bold, pkgJsonCLI } from "./constants";
 import { checkCore, getHelp } from "./utilities";
 
 /** Check version of installed harmony packages */
@@ -20,23 +20,17 @@ const harmonyVersion = async () => {
         }).`
       )
     );
-  } else {
-    console.log(
-      error(`No installed version of harmony \nfound in this application.`)
-    );
-    getHelp();
-  }
+  } else
+    getHelp(`No installed version of harmony \nfound in this application.`);
 
   // About
   console.log(
     `
-Harmony is FA Solutions' framework
-for React-based app development.
-The CLI is made to manage harmony's 
-packages and versioning in the apps.
-Contributors:`
+harmony CLI contributors:`
   );
-  pkgJsonCLI.contributors.forEach((n: string) => console.log(`  %s`, n));
+  pkgJsonCLI.contributors.forEach((n: string | { name: string }) =>
+    console.log(`- %s`, typeof n === "string" ? n : n.name)
+  );
 };
 
 export { harmonyVersion };

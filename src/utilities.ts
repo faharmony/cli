@@ -57,7 +57,8 @@ const checkPackageInfo = (
 const checkCore = () => checkPackageInfo(core);
 
 // getHelp function
-const getHelp = () => console.log("Use param --help or -h for help.");
+const getHelp = (err: string = "") =>
+  console.log(`${error(err)}\nUse param --help or -h for help.`);
 
 const getPackageObject = (packageName: string) =>
   mainPackages.find((p) => p.name === packageName);
