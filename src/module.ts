@@ -22,13 +22,13 @@ const generateModule = async () => {
     return;
   }
 
+  console.log(`Fetching latest module template...`);
   await execute(`npm i faharmony/cli --no-save`);
 
   console.log(color(`Initiating module generator script...`));
-
   const pathPlop = `${paths.nodeModules}${scope}/cli/bin/plop.js`;
-  if (await execute(`npx plop --plopfile ${pathPlop} ${moduleId}`, true))
-    console.log(success(`New module "${moduleId}" is generated.`));
+  await execute(`npx plop --plopfile ${pathPlop} ${moduleId}`, true);
+  console.log(success(`New module "${moduleId}" is generated.`));
   return;
 };
 
