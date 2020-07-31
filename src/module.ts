@@ -22,20 +22,11 @@ const generateModule = async () => {
     return;
   }
 
-  // const Module = "module";
-  // const modulePkgInfo = checkPackageInfo(Module);
-  // const pkgObj = getPackageObject(Module);
-  // pkgObj &&
-  //   (await install({
-  //     pkg: pkgObj,
-  //     version: (modulePkgInfo && modulePkgInfo.tag) || "latest",
-  //     options: "--no-save",
-  //   }));
+  await execute(`npm i faharmony/cli --no-save`);
+
   console.log(color(`Initiating module generator script...`));
 
   const pathPlop = `${paths.nodeModules}${scope}/cli/bin/plop.js`;
-  // const pathPlop = `${paths.nodeModules}.bin/faharmony/cli/bin/plop.js`;
-  // const pathPlop = `./plop.js`;
   if (await execute(`npx plop --plopfile ${pathPlop} ${moduleId}`, true))
     console.log(success(`New module "${moduleId}" is generated.`));
   return;
