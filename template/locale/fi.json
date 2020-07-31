@@ -1,0 +1,5 @@
+{
+  "moduleName": "{{ properCase moduleId }}-FI",
+  "SubModule": "Sub Module -FI",
+  "loading": "Redux loader -FI"
+}
