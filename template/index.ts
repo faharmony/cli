@@ -52,7 +52,7 @@ const subModules: IModuleProps["subModules"] = [
  * ━━━━━━━━━━━━━
  * DO NOT CHANGE
  */
-export default (): IModuleProps => ({
+export default {
   id: ModuleID,
   component: ModuleComponent,
   label: ModuleLabelFallback,
@@ -60,5 +60,5 @@ export default (): IModuleProps => ({
   icon: ModuleIcon,
   state: ModuleState,
   subModules,
-});
+} as IModuleProps;
 export { ModuleID };
