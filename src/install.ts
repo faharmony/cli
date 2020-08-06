@@ -20,7 +20,6 @@ import {
   mainPackages,
   paths,
   commands,
-  useYarn,
   tags,
   bold,
   ora,
@@ -77,12 +76,12 @@ const install = async ({
     const installer = ora(oraOptions).start();
     // Install package
     const library = getLibraryName(name) + "@" + version;
-    const command = `${commands.install()} ${library} ${options}`;
+    const command = `${commands.install} ${library} ${options}`;
     const res = await execute(command);
     // Install types
     if (types.length > 0) {
       const typeLibraries = getTypeLibraries(types);
-      const typesCommand = `${commands.install()} -D ${typeLibraries}`;
+      const typesCommand = `${commands.install} -D ${typeLibraries}`;
       await execute(typesCommand);
     }
     // Result
@@ -140,9 +139,6 @@ const installPackages = async ({
 
   // Update common deps to match tagged version
   await installCommonPackages(version);
-
-  // Dedupe
-  if (!useYarn) await execute(`npm dedupe`);
 };
 
 // PARAM based installers

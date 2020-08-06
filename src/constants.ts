@@ -51,19 +51,12 @@ const tags = ["stable", "latest", "snapshot", "dev", "rc", "freeze"];
 // Paths
 const paths = {
   nodeModules: process.cwd() + "/node_modules/",
-  yarnLock: process.cwd() + "/yarn.lock",
 };
-
-const useYarn = fs.existsSync(paths.yarnLock);
 
 // Commands
 const commands = {
-  install: () => (useYarn ? `yarn add` : `npm install`),
-  remove: () => (useYarn ? `yarn remove` : `npm uninstall`),
-};
-
-const outputs = {
-  manager: () => (useYarn ? "Yarn" : "NPM"),
+  install: `yarn add`,
+  remove: `yarn remove`,
 };
 
 export {
@@ -83,8 +76,6 @@ export {
   mainPackages,
   paths,
   commands,
-  useYarn,
-  outputs,
   tags,
   exec,
   pkgJsonCLI,

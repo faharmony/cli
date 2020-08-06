@@ -19,7 +19,7 @@ const generateModule = async () => {
   if (moduleId === "") getHelp(`ModuleID was not provided in command.`);
   else {
     console.log(`Fetching latest module template...`);
-    await execute(`npm i faharmony/cli --no-save`);
+    await execute(`yarn add faharmony/cli --no-save`);
 
     console.log(color(`Initiating module generator script...`));
     const pathPlop = `${paths.nodeModules}${scope}/cli/bin/modulePlop.js`;
